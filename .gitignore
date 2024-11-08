@@ -1,0 +1,61 @@
+# Ignore log files
+*.log
+
+# Ignore temporary files created by editors
+*.bak
+*.orig
+
+# Ignore OS-specific files
+*.DS_Store
+*.AppleDouble
+*.LSOverride
+
+# Ignore npm debug log
+npm-debug.log*
+
+# Ignore yarn debug log
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore eslint cache
+.eslintcache
+
+# Ignore stylelint cache
+.stylelintcache
+
+# Ignore coverage reports for various tools
+coverage/
+coverage-final.json
+.nyc_output/
+
+# Ignore parcel-bundler cache
+.cache/
+
+# Ignore next.js build output
+.next/
+
+# Ignore Nuxt.js build output
+.nuxt/
+
+# Ignore Gatsby files
+.cache/
+public/
+
+# Ignore vuepress build output
+.vuepress/dist
+
+# Ignore temporary files created by VSCode
+.vscode/
+
+# Ignore temporary files created by JetBrains IDEs
+.idea/
+
+# Ignore temporary files created by Sublime Text
+*.sublime-workspace
+
+# Ignore temporary files created by Emacs
+*~
+
+# Ignore temporary files created by Vim
+*.swp
+*.swo
