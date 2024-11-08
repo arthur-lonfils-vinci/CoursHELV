@@ -1,0 +1,20 @@
+	
+	@Override
+	public String toString() {
+		String hms = String.format("%d h %02d m", dureeEnMinutes.toHours(), dureeEnMinutes.toMinutes()%60);
+		String res = this.nom + "\n\n";
+		res += "Pour " + this.nbPersonnes + " personnes\n";
+		res += "Difficulté : " + this.niveauDeDifficulte + "\n";
+		res += "Coût : " + this.cout + "\n";
+		res += "Durée : " + hms + " \n\n";
+		res += "Ingrédients :\n";
+		for (IngredientQuantifie ing : this.ingredients) {
+			res += ing + "\n";
+		}
+		int i = 1;
+		res += "\n";
+		for (Instruction instruction : this.recette) {
+			res += i++ + ". " + instruction + "\n";
+		}
+		return res;
+	}

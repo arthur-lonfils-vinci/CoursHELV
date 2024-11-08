@@ -1,0 +1,68 @@
+Resultats pour ExercicesDeBase
+==============================
+
+Les transactions [{Trader:Brian in Cambridge, year: 2011, value:300}, {Trader:Raoul in Cambridge, year: 2012, value:1000}, {Trader:Raoul in Cambridge, year: 2011, value:400}, {Trader:Mario in Milan, year: 2012, value:710}, {Trader:Mario in Milan, year: 2012, value:700}, {Trader:Alan in Cambridge, year: 2012, value:950}]
+predicats1
+juste la collection non fonctionnellejava.util.stream.ReferencePipeline$2@2d3fcdbd
+{Trader:Brian in Cambridge, year: 2011, value:300}
+{Trader:Raoul in Cambridge, year: 2011, value:400}
+predicats2
+{Trader:Raoul in Cambridge, year: 2012, value:1000}
+{Trader:Mario in Milan, year: 2012, value:710}
+{Trader:Mario in Milan, year: 2012, value:700}
+{Trader:Alan in Cambridge, year: 2012, value:950}
+predicats3
+{Trader:Raoul in Cambridge, year: 2012, value:1000}
+{Trader:Raoul in Cambridge, year: 2011, value:400}
+map1
+Cambridge
+Milan
+map2
+Trader:Brian in Cambridge
+Trader:Raoul in Cambridge
+Trader:Alan in Cambridge
+map3
+Brian, Raoul, Mario, Alan
+sort1
+{Trader:Brian in Cambridge, year: 2011, value:300}
+{Trader:Raoul in Cambridge, year: 2011, value:400}
+{Trader:Mario in Milan, year: 2012, value:700}
+{Trader:Mario in Milan, year: 2012, value:710}
+{Trader:Alan in Cambridge, year: 2012, value:950}
+{Trader:Raoul in Cambridge, year: 2012, value:1000}
+sort2
+Alan, Brian, Mario, Raoul
+reduce1
+1000
+reduce2
+{Trader:Brian in Cambridge, year: 2011, value:300}
+
+
+Resultats Optional
+==================
+
+optional1
+1000
+optional2
+{Trader:Brian in Cambridge, year: 2011, value:300}
+
+Avec transaction list vide:
+
+optional1
+-1
+optional2
+Pas de transaction trouvée
+
+Resultats GroupBy
+=================
+
+GroupBy1
+{Trader:Raoul in Cambridge=[{Trader:Raoul in Cambridge, year: 2012, value:1000}, {Trader:Raoul in Cambridge, year: 2011, value:400}], Trader:Mario in Milan=[{Trader:Mario in Milan, year: 2012, value:710}, {Trader:Mario in Milan, year: 2012, value:700}], Trader:Alan in Cambridge=[{Trader:Alan in Cambridge, year: 2012, value:950}], Trader:Brian in Cambridge=[{Trader:Brian in Cambridge, year: 2011, value:300}]}
+GroupBy2
+{Trader:Raoul in Cambridge=2, Trader:Mario in Milan=2, Trader:Alan in Cambridge=1, Trader:Brian in Cambridge=1}
+GroupBy3
+{HI=[{Trader:Alan in Cambridge, year: 2012, value:950}], VERY_HI=[{Trader:Raoul in Cambridge, year: 2012, value:1000}], ME=[{Trader:Mario in Milan, year: 2012, value:710}, {Trader:Mario in Milan, year: 2012, value:700}], LO=[{Trader:Brian in Cambridge, year: 2011, value:300}, {Trader:Raoul in Cambridge, year: 2011, value:400}]}
+
+
+Pas de transaction trouvée
+

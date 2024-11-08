@@ -1,0 +1,14 @@
+toString de la classe LigneDeCommande :
+    public String toString() {
+        return  quantite + " " + pizza.getTitre() + "  à " + prixUnitaire ;
+    }
+
+toString de la class Commande :
+
+    public String toString() {
+        DateTimeFormatter formater = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+        String encours = "";
+        if (client.getCommandeEnCours() == this)
+            encours = " (en cours)";
+        return "Commande n° " + numero + encours + " du " + client + "\ndate : " + formater.format(date);
+    }
