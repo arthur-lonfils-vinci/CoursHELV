@@ -1,0 +1,95 @@
+@baseUrl = http://localhost:3000
+
+### Read all texts
+GET {{baseUrl}}/texts
+
+### Read all texts with "easy" level
+GET {{baseUrl}}/texts/?level=easy
+
+### Try to read texts with wrong level
+GET {{baseUrl}}/texts/?level=hardcore
+
+### Read text based on id
+GET {{baseUrl}}/texts/967979ee-4c4b-4f93-920b-115976fa4abb
+
+### Read text which does not exist
+GET {{baseUrl}}/texts/500
+
+### Create a text
+POST {{baseUrl}}/texts
+Content-Type: application/json
+
+{
+    "content":"Once upon a time in a galaxy far, far away...",
+    "level": "easy"
+}
+
+### Try to create a text with a parameter missing
+POST {{baseUrl}}/texts/
+Content-Type: application/json
+
+{
+    "content":"Once upon a time in a galaxy far, far away..."
+}
+
+### Try to create a text with an empty string or string with whitespaces only
+POST {{baseUrl}}/texts/
+Content-Type: application/json
+
+{
+    "content":" ",
+    "level": "easy"
+}
+
+
+### Try to create a text with a wrong level
+POST {{baseUrl}}/texts
+Content-Type: application/json
+
+{
+    "content":"Once upon a time in a galaxy far, far away...",
+    "level": "hardcore"
+}
+
+
+### Try to create a text which already exists (same content)
+POST {{baseUrl}}/texts
+Content-Type: application/json
+
+{
+    "content":"Once upon a time in a galaxy far, far away...",
+    "level": "easy"
+}
+
+### Delete the text by id
+DELETE {{baseUrl}}/texts/967979ee-4c4b-4f93-920b-115976fa4abb
+
+### Update text based on id
+PUT {{baseUrl}}/texts/98c72e0e-db05-442a-b035-061f56f7e7f8
+Content-Type: application/json
+
+{
+    "content":"This is a(n) (updated) text.",
+    "level": "easy"
+}
+
+### Try to update text based on id with empty param
+
+PUT {{baseUrl}}/texts/98c72e0e-db05-442a-b035-061f56f7e7f8
+Content-Type: application/json
+
+{
+    "content":"",
+    "level": "easy"
+}
+
+### Challenge : Try to update text based on id with unexpected param (id)
+PUT {{baseUrl}}/texts/98c72e0e-db05-442a-b035-061f56f7e7f8
+Content-Type: application/json
+
+{
+    "content":"I am unexpected",
+    "level": "easy",
+    "id": "I am unexpected"
+}
+

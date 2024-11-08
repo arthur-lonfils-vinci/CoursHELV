@@ -1,0 +1,28 @@
+.user-card {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 300px;
+    box-shadow: 5px 5px 15px rgba(45, 125, 238, 0.5);
+    margin: 10px;
+}
+
+.user-card h3 {
+    margin: 0 0 8px 0;
+    color: #d4d1d1;
+}
+
+.user-card p {
+    margin: 0 0 8px 0;
+    color: #666;
+}
+
+
+.user-card p.user-online {
+    color: green;
+}
+
+.user-card p.user-offline {
+    color: red;
+}

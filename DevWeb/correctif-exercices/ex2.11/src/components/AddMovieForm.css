@@ -1,0 +1,51 @@
+form {
+    max-width: 600px; /* Limit form width */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 1rem; /* Padding around the form */
+    border: 1px solid #ddd; /* Light border around the form */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+form div {
+    margin-bottom: 1rem; /* Space between form elements */
+}
+
+form label {
+    display: block; /* Ensure label is on its own line */
+    margin-bottom: 0.5rem; /* Space between label and input */
+    font-weight: bold; /* Make labels bold */
+    color: #333; /* Darker color for labels */
+}
+
+form input[type="text"],
+form input[type="number"],
+form textarea {
+    width: 100%; /* Full width inputs */
+    padding: 0.5rem; /* Padding inside inputs */
+    border: 1px solid #ccc; /* Light border for inputs */
+    border-radius: 4px; /* Rounded corners for inputs */
+    box-sizing: border-box; /* Include padding and border in width */
+    font-size: 1rem; /* Uniform font size */
+}
+
+form textarea {
+    height: 100px; /* Set a fixed height for textarea */
+}
+
+form button {
+    display: inline-block; /* Button as an inline-block */
+    padding: 0.75rem 1.5rem; /* Padding inside button */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners for button */
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    font-size: 1rem; /* Font size for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+form button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+}

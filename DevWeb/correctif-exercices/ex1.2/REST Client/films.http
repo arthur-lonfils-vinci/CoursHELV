@@ -1,0 +1,3 @@
+### Read all films
+GET http://localhost:3000/films
+

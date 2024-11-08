@@ -1,0 +1,83 @@
+######### NORMAL OPERATION  ###########
+
+### Read all films
+@baseURL= http://localhost:3000
+GET {{baseURL}}/films
+
+### READ ALL with minimum duration filter
+GET  {{baseURL}}/films?by-minimum-duration=153
+
+### READ ALL with minimum duration filter (With an Error)
+GET  {{baseURL}}/films?by-minimum-duratio=153
+
+### READ ALL by first letter filter
+GET {{baseURL}}/films?by-firstLetter=T
+
+### READ ALL by director filter
+GET {{baseURL}}/films?by-director=Christopher Nolan
+
+### READ ONE (by id)
+GET {{baseURL}}/films/4
+
+### ADD a film
+POST {{baseURL}}/films
+Content-Type: application/json
+
+{
+    "title": "Star Wars: Episode IV - A New Hope",
+    "director": "George Lucas",
+    "duration": 121,
+    "budget": 11000000,
+    "description": "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth Vader.",
+    "imageURL": "https://www.imdb.com/title/tt0076759/mediaviewer/rm4248124160"
+}
+
+### ADD a film that's already existing
+POST {{baseURL}}/films
+Content-Type: application/json
+
+{
+    "title": "Star Wars: Episode IV - A New Hope",
+    "director": "George Lucas",
+    "duration": 121,
+    "budget": 11000000,
+    "description": "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth Vader.",
+    "imageURL": "https://www.imdb.com/title/tt0076759/mediaviewer/rm4248124160"
+}
+
+### DELETE a film
+DELETE {{baseURL}}/films/4
+
+### UPDATE a film
+PATCH {{baseURL}}/films/3
+Content-Type: application/json
+
+{
+    "excel": 179
+}
+
+### PUT a film (add)
+PUT {{baseURL}}/films/9
+Content-Type: application/json
+
+{
+    "title": "The Lion King",
+    "director": "Roger Allers, Rob Minkoff",
+    "duration": 88,
+    "budget": 45000000,
+    "description": "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.",
+    "imageURL": "https://www.imdb.com/title/tt0110357/mediaviewer/rm1954748672"
+}
+
+### PUT a film (update)
+PUT {{baseURL}}/films/9
+Content-Type: application/json
+
+{
+    "title": "The Lion King",
+    "director": "Roger Allers, Rob Minkoff",
+    "duration": 92,
+    "budget": 45000000,
+    "description": "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.",
+    "imageURL": "https://www.imdb.com/title/tt0110357/mediaviewer/rm1954748672"
+}

@@ -1,0 +1,33 @@
+######### NORMAL OPERATION  ###########
+
+### Read all films
+@baseURL= http://localhost:3000
+GET {{baseURL}}/films
+
+### READ ALL with minimum duration filter
+GET  {{baseURL}}/films?by-minimum-duration=153
+
+### READ ALL by first letter filter
+GET {{baseURL}}/films?by-firstLetter=T
+
+### READ ALL by director filter
+GET {{baseURL}}/films?by-director=Christopher Nolan
+
+### READ ALL by budget filter ascendant
+GET {{baseURL}}/films?by-budget
+
+### READ ONE (by id)
+GET {{baseURL}}/films/4
+
+### ADD a film
+POST {{baseURL}}/films
+Content-Type: application/json
+
+{
+    "title": "Star Wars: Episode IV - A New Hope",
+    "director": "George Lucas",
+    "duration": 121,
+    "budget": 11000000,
+    "description": "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth Vader.",
+    "imageURL": "https://www.imdb.com/title/tt0076759/mediaviewer/rm4248124160"
+}

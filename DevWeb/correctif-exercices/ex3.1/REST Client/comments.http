@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:3000
+
+### Read all comments
+GET {{baseUrl}}/comments
+
+### Read all comments linked to a film
+GET {{baseUrl}}/comments/?filmId=1
+
+### Create a new user
+# @name me
+POST {{baseUrl}}/auths/register
+Content-Type: application/json
+
+{
+    "username":"me",
+    "password":"me"
+}
+
+### Login the user
+# @name me
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"me",
+    "password":"me"
+}
+
+### Create a new comment
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: {{me.response.body.token}}
+
+{
+    "filmId": 1,
+    "comment": "This is a wonderful comment"
+}
+
+### Create a new comment
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: {{me.response.body.token}}
+
+{
+    "filmId": 3,
+    "comment": "I liked it"
+}
+
+### Login the admin
+# @name admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"admin"
+}
+
+### Create a new comment
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: {{admin.response.body.token}}
+
+{
+    "filmId": 1,
+    "comment": "This is a comment from superadmin"
+}
+
+### Delete a comment
+DELETE {{baseUrl}}/comments/films/1
+Authorization: {{admin.response.body.token}}

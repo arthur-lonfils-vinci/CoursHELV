@@ -1,0 +1,89 @@
+@baseUrl = http://localhost:3000
+
+### Read all films
+GET {{baseUrl}}/films
+
+### Read all films with minimum-duration of 140min
+GET {{baseUrl}}/films/?minimum-duration=130
+
+### Try to read films with wrong minimum-duration
+GET {{baseUrl}}/films/?minimum-duration=0
+
+### Read film with ID == 1
+GET {{baseUrl}}/films/1
+
+### Read film which does not exist
+GET {{baseUrl}}/films/500
+
+### Create a film
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "duration": 136,
+    "director": "George Lucas",
+    "budget": 115,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg"
+}
+
+### Try to create a film with a parameter missing
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":" ",
+    "duration": 136,
+    "budget": 115,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg"
+}
+
+### Try to create a film with an empty string or string with whitespaces only
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":" ",
+    "duration": 136,
+    "director": "George Lucas",
+    "budget": 115,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg"
+}
+
+### Try to create a film with a wrong budget (string instead of number)
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "duration": 136,
+    "director": "George Lucas",
+    "budget": "115",
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg"
+}
+
+### Challenge of ex1.4 : Try to create a film with an unexpected parameter
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "duration": 136,
+    "director": "George Lucas",
+    "budget": 115,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg",
+    "unexpected": "unexpected"
+}
+
+### Try to create a film which already exists (same title and director)
+POST {{baseUrl}}/films/
+Content-Type: application/json
+
+{
+    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "duration": 136,
+    "director": "George Lucas",
+    "budget": 115,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/en/4/40/Star_Wars_Phantom_Menace_poster.jpg"
+}
+
