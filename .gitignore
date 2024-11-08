@@ -1,3 +1,48 @@
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore local development database files
+*.sqlite
+*.sqlite3
+
+# Ignore local environment configuration files
+local.env
+
+# Ignore npm package lock file
+package-lock.json
+
+# Ignore yarn lock file
+yarn.lock
+
+# Ignore pnpm lock file
+pnpm-lock.yaml
+
+# Ignore Docker files
+Dockerfile
+docker-compose.yml
+
+# Ignore Vagrant files
+Vagrantfile
+
+# Ignore temporary files created by macOS
+.DS_Store
+
+# Ignore temporary files created by Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore temporary files created by Linux
+*~
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output directories
+dist/
+build/
+
 # Ignore log files
 *.log
 
