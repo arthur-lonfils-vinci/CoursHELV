@@ -1,0 +1,12 @@
+.page-content {
+  height: 100vh;
+  background-color: #f0f0f0;
+  padding: 1rem;
+
+  /* if screen is large */
+  @media screen and (min-width: 800px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
