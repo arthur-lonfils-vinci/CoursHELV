@@ -16,7 +16,6 @@ void freeMatrice (char** m, int h) {
 	free(m);
 }
 
-
 /*Function to create a matrice of pointer
  * int h = the number of lignes
  * int l = the number of columns
