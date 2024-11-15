@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Movie } from "../../types";
 import {
   Card,
-  CardContent,
   CardMedia,
-  Typography,
   CardActionArea,
 } from "@mui/material";
 
@@ -13,16 +11,13 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ movie }: MovieCardProps) => {
-  const [open, setOpen] = useState(false);
-  const handleClick = () => {
-    setOpen(!open);
-  };
+
+  const navigate = useNavigate();
 
   return (
     <div>
       <Card sx={{ maxWidth: 345 }}>
-        <CardActionArea onClick={handleClick}>
-          {!open ? (
+        <CardActionArea onClick={() => navigate(`/moviepage/${movie.id}`)}>
             <>
               <CardMedia
                 component="img"
@@ -31,31 +26,6 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                 alt={movie.title}
               />
             </>
-          ) : (
-            <>
-              <CardContent sx={{ height: 500 }}>
-                <Typography gutterBottom variant="h5" component="div">
-                  {movie.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  <strong>Réalisateur : </strong>{movie.director}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  <strong>Durée :</strong> {movie.duration} minutes
-                </Typography>
-                {movie.budget && (
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Budget :</strong> {movie.budget} millions de dollars
-                  </Typography>
-                )}
-                {movie.description && (
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Description :</strong> {movie.description}
-                  </Typography>
-                )}
-              </CardContent>
-            </>
-          )}
         </CardActionArea>
       </Card>
     </div>

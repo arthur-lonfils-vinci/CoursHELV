@@ -19,7 +19,7 @@ const MovieListView = ({ movies, onMovieAdded }: MovieListViewProps) => {
           </Grid>
         ))}
         <Grid item xs={12} sm={6} md={4}>
-          <AddMovieForm onMovieAdded={onMovieAdded}/>
+          <AddMovieForm onMovieAdded={onMovieAdded} Movies={movies}/>
         </Grid>
       </Grid>
     </Container>

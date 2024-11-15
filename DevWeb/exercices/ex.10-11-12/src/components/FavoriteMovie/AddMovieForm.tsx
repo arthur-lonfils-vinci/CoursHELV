@@ -11,10 +11,12 @@ import {
 } from "@mui/material";
 
 interface AddMovieFormProps {
+  Movies: Movie[];
   onMovieAdded: (movie: Movie) => void;
 }
 
-const AddMovieForm = ({ onMovieAdded }: AddMovieFormProps) => {
+const AddMovieForm = ({ Movies, onMovieAdded }: AddMovieFormProps) => {
+  const [id, setId] =  useState(Movies.length + 1);
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [duration, setDuration] = useState(0);
@@ -24,7 +26,8 @@ const AddMovieForm = ({ onMovieAdded }: AddMovieFormProps) => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    onMovieAdded({ title, director, duration, imageUrl, description, budget });
+    onMovieAdded({ id, title, director, duration, imageUrl, description, budget });
+    setId(1);
     setTitle("");
     setDirector("");
     setDuration(0);

@@ -8,7 +8,7 @@ interface NavbarProps {
 const Navbar = (props: NavbarProps) => {
 
     return (
-        <AppBar position="static" color="transparent" sx={{ boxShadow: "none", borderBottom: "1px solid #ddd" }}>
+        <AppBar position="static" color="transparent" sx={{ boxShadow: "none"}}>
             <Toolbar sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
                 <NavButton menuButtonNames={props.menuButtonNames}/>
             </Toolbar>

@@ -1,4 +1,5 @@
 interface MovieFavourite {
+  id: number;
   title: string;
   director: string;
   duration: number;
