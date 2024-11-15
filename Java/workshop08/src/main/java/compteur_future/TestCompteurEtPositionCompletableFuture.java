@@ -39,6 +39,14 @@ public class TestCompteurEtPositionCompletableFuture {
 
         // TODO : 1. Exécuter tous les compteurs et déterminer la positon de manière asynchrone
         //  en faisant appel à la méthode countAndGetPositionAsync
+        Arrays.stream(compteurs).forEach(compteur -> {
+            CompletableFuture<Integer> future = compteur.countAndGetPositionAsync();
+            try {
+                System.out.println("Async Compteur : " + compteur.getNom() + " - Position : " + future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
 
         end = System.currentTimeMillis();
         duration = end - start;
@@ -50,7 +58,8 @@ public class TestCompteurEtPositionCompletableFuture {
         start = System.currentTimeMillis();
 
         // TODO : 2. Exécuter tous les compteurs et déterminer la position de manière asynchrone
-        //  en faisant appel à la méthode countAndGetPosition
+        //  en faisant appel à la méthode countAndGetPosition()
+
 
         end = System.currentTimeMillis();
         duration = end - start;

@@ -3,15 +3,19 @@ package compteur_runnable;
 import sync.Compteur;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 public class CompteurRunnableWithRaceCondition extends Compteur implements Runnable {
     private String nom;
     private int max;
     //TODO: 1. ajouter un attribut de classe qui retient l'ordre d'arrivée.
+    private static AtomicInteger ordreArrivee = new AtomicInteger();
 
     public CompteurRunnableWithRaceCondition(String nom, int max) {
         super(nom, max);
+        this.nom = nom;
+        this.max = max;
     }
 
     @Override
@@ -32,6 +36,12 @@ public class CompteurRunnableWithRaceCondition extends Compteur implements Runna
                 e.printStackTrace();
             }
         });
-        System.out.println(nom + " a finit de compter jusqu'à " + max);
+        ordreArrivee.incrementAndGet();
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(nom + " a finit de compter jusqu'à " + max + " et est arrivé en " + ordreArrivee);
     }
 }

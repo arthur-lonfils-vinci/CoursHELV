@@ -34,6 +34,8 @@ public class CompteurThreadWithRaceCondition extends Thread {
             System.out.println(nom + " : " + i);
             try {
                 Thread.sleep(10);
+                gagnant = this;
+                System.out.println("Le compteur gagnant est " + gagnant.getNom() + " à " + LocalDateTime.now());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

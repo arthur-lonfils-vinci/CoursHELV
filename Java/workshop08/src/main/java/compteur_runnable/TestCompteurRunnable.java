@@ -16,6 +16,7 @@ public class TestCompteurRunnable {
 
 		for (CompteurRunnable compteurRunnable : compteurs) {
 			// TODO: lancer les compteurs
+			compteurRunnable.run();
 		}
 
 		long end = System.currentTimeMillis();

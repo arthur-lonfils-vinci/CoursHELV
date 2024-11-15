@@ -14,9 +14,9 @@ public class TestCompteurRunnableWithRaceCondition {
         LocalDateTime start = LocalDateTime.now();
 
         for (CompteurRunnableWithRaceCondition compteurRunnableWithRaceCondition : compteurs) {
-            Thread t = new Thread(compteurRunnableWithRaceCondition);
-            t.start();
+            compteurRunnableWithRaceCondition.run();
         }
+
         LocalDateTime end = LocalDateTime.now();
         long duration = java.time.Duration.between(start, end).toMillis();
         System.out.println("Durée avant d'atteindre cette instruction de fin du programme principal : " + duration + " ms");

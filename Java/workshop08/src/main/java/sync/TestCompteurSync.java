@@ -18,6 +18,4 @@ public class TestCompteurSync {
         System.out.println("Tout le monde a fini de compter !");
         System.out.println("Durée avant d'atteindre cette instruction de fin du programme principal : " + duration + " ms");
     }
-
-
 }

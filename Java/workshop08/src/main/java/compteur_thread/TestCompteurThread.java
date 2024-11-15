@@ -12,19 +12,23 @@ public class TestCompteurThread {
 
         for (int i = 0; i < compteurs.length; i++) {
             //TODO: lancer les compteurs
+            compteurs[i].start();
         }
 
 
         for (int i = 0; i < compteurs.length; i++) {
             //TODO: attendre la fin de l'exécution de tous les compteurs
             //		pour attendre un thread t, utiliser t.join();
-
-
+            try {
+                compteurs[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         LocalDateTime end = LocalDateTime.now();
         long duration = java.time.Duration.between(start, end).toMillis();
-        System.out.println("Tout le monde a fini de compter !");
+        System.out.println("Tout le monde a fini de compter ! Total: " + duration +"ms");
 
     }
 

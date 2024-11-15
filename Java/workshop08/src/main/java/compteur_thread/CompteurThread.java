@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 // TODO : Compléter la classe CompteurThread pour qu'elle hérite de Thread
 //  et qu'elle implémente la méthode run
 
-public class CompteurThread {
+public class CompteurThread extends Thread {
 
     private final String nom;
     private final int max;
@@ -30,6 +30,10 @@ public class CompteurThread {
             }
         });
         System.out.println(nom + " a finit de compter jusqu'à " + max + " à " + LocalDateTime.now());
+    }
+
+    public void run() {
+        count();
     }
 
 }
