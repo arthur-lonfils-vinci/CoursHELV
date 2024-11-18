@@ -1,38 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import Footer from "../Footer";
 import Header from "../Header";
 import { Drink, NewPizza, Pizza, PizzeriaContext } from "../../types";
 import NavBar from "../Navbar";
-
-const defaultPizzas: Pizza[] = [
-  {
-    id: 1,
-    title: "4 fromages",
-    content: "Gruyère, Sérac, Appenzel, Gorgonzola, Tomates",
-  },
-  {
-    id: 2,
-    title: "Vegan",
-    content: "Tomates, Courgettes, Oignons, Aubergines, Poivrons",
-  },
-  {
-    id: 3,
-    title: "Vegetarian",
-    content: "Mozarella, Tomates, Oignons, Poivrons, Champignons, Olives",
-  },
-  {
-    id: 4,
-    title: "Alpage",
-    content: "Gruyère, Mozarella, Lardons, Tomates",
-  },
-  {
-    id: 5,
-    title: "Diable",
-    content: "Tomates, Mozarella, Chorizo piquant, Jalapenos",
-  },
-];
 
 const drinks: Drink[] = [
   {
@@ -60,7 +32,22 @@ const drinks: Drink[] = [
 
 const App = () => {
   const [actionToBePerformed, setActionToBePerformed] = useState(false);
-  const [pizzas, setPizzas] = useState(defaultPizzas);
+  const [pizzas, setPizzas] = useState<Pizza[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/pizzas")
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(
+            `fetch error : ${response.status} : ${response.statusText}`
+          );
+        return response.json();
+      })
+      .then((pizzas) => setPizzas(pizzas))
+      .catch((err) => {
+        console.error("HomePage::error: ", err);
+      });
+  }, []);
 
   const addPizza = (newPizza: NewPizza) => {
     const pizzaAdded = { ...newPizza, id: nextPizzaId(pizzas) };

@@ -2,9 +2,10 @@
 import path from "node:path";
 import { Pizza, NewPizza } from "../types";
 import { parse, serialize } from "../utils/json";
-const jsonDbPath = path.join(__dirname, "/../data/pizzas.json");
+const jsonDbPath = path.join(__dirname, "../data/pizzas.json");
 
-const pizzas = parse(jsonDbPath) as Pizza[]; 
+//const pizzas = parse(jsonDbPath); 
+const pizzas: Pizza[] = parse(jsonDbPath);
 
 function readAllPizzas(order: string | undefined): Pizza[] {
   const orderByTitle = order && order.includes("title") ? order : undefined;
