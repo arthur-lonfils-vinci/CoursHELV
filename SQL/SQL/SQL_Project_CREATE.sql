@@ -348,3 +348,75 @@ CREATE TRIGGER verify_reservation
     BEFORE INSERT ON project_schema.reservations
     FOR EACH ROW
     EXECUTE FUNCTION check_reservation();
+
+--Ajouter la procédure de réservation d’un certain nombre de places pour tous les événements
+--d’un festival. Si une des réservations échoue, alors aucune réservation ne sera enregistrée.
+
+CREATE OR REPLACE FUNCTION reserverFestival(add_festival INTEGER, add_nb_tickets INTEGER, add_client INTEGER)
+    RETURNS VOID AS $$
+DECLARE
+    event RECORD;
+    reservation_failed BOOLEAN := FALSE;
+BEGIN
+    FOR event IN
+        SELECT *
+        FROM project_schema.evenements
+        WHERE festival = add_festival
+    LOOP
+        BEGIN
+            PERFORM ajouterReservation(event.salle, event.date_evenement, add_nb_tickets, add_client);
+            /*
+            EXCEPTION
+            WHEN OTHERS THEN
+                reservation_failed := TRUE;
+            */
+        END;
+    END LOOP;
+
+    IF reservation_failed THEN
+        RAISE EXCEPTION 'One or more reservations failed';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+--VIEWS----------------------------
+
+CREATE OR REPLACE VIEW festivalsFuturs (nom, date_premier, date_dernier, somme_prix)
+AS SELECT f.nom, MIN(e.date_evenement), MAX(e.date_evenement), SUM(e.prix)
+FROM project_schema.festivals f
+JOIN project_schema.evenements e ON f.id_festival = e.festival
+WHERE e.date_evenement >= CURRENT_DATE
+GROUP BY f.nom;
+
+CREATE OR REPLACE VIEW reservationsClient (nom_client, nom_evenement, date_evenement, salle_evenement, num_reservation, nb_tickets)
+AS SELECT c.nom_utilisateur, e.nom, r.date_evenement, r.salle, r.num_reservation, r.nb_tickets
+FROM project_schema.reservations r
+JOIN project_schema.evenements e ON r.salle = e.salle AND r.date_evenement = e.date_evenement
+JOIN project_schema.clients c ON r.client = c.id_client
+ORDER BY c.nom_utilisateur, r.date_evenement, r.salle, r.num_reservation;
+
+--SELECT
+
+SELECT ajouterclient('Mathieu','mathieu@kontu.be','MICHELMICHEL');
+SELECT ajouterclient('Alexandre','alexandre@kontu.be','ALEXALEX');
+
+SELECT ajouterfestival('Kontu Festival');
+
+SELECT ajouterartiste('Mathieu','be');
+SELECT ajoutersalle('Salle1','Bruxelles',567);
+SELECT ajouterevenement(1,'20-11-2024','KontuFestival',45,5600,1);
+SELECT ajouterConcert(1, '20-11-2024', '13:40', 1);
+
+SELECT ajouterartiste('Alexandre','be');
+SELECT ajoutersalle('Salle2','Bruxelles',567);
+SELECT ajouterevenement(2,'21-11-2024','KontuSansBere',30,4500,1);
+SELECT ajouterConcert(2, '21-11-2024', '16:40', 2);
+
+SELECT ajouterReservation(1, '20-11-2024', 2, 1);
+SELECT ajouterreservation(1, '20-11-2024', 1, 1);
+--SELECT ajouterreservation(1, '20-11-2024', 2, 1); --Error - Exception
+SELECT reserverfestival(1, 3, 2);
+--SELECT reserverFestival(1, 4, 1); --Error - Exception
