@@ -8,17 +8,21 @@ interface RandomDogProps {
 
 function RandomDog() {
   const [dog, setDog] = useState<RandomDogProps>();
+  const [isHovered, setIsHovered] = useState(false);
 
 
   useEffect(() => {
+
+    if (isHovered) return;
+
     const interval = setInterval(() => {
       fetchDog();
-    }, 5000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [isHovered]);
 
   const fetchDog = async () => {
     try {
@@ -36,11 +40,15 @@ function RandomDog() {
     }
   }
 
+
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
   return (
     <>
       {dog && (
         <div key={dog.key} style={{ display: "flex", padding: "10px" }}>
-          <img src={dog.message} alt="random dog" style={{ width: "200px" }} />
+          <img src={dog.message} alt="random dog" style={{ width: "200px" }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}/>
         </div>
       )}
     </>
