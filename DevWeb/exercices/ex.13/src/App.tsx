@@ -28,6 +28,14 @@ function App() {
       });
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchJoke();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <h4>Category : {data.category}</h4>
