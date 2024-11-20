@@ -6,13 +6,19 @@ interface RandomDogProps {
   message: string;
 }
 
-function RandomDog(method: any) {
+function RandomDog() {
   const [dog, setDog] = useState<RandomDogProps>();
 
 
   useEffect(() => {
-    fetchDog();
-  }, [method]);
+    const interval = setInterval(() => {
+      fetchDog();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const fetchDog = async () => {
     try {
