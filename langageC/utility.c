@@ -174,15 +174,8 @@ char *strReadLine(char *messageError, int maxCharacters) {
           clearBuffer();
           return NULL;
         }
-        // Vérifier si la ligne respecte la longueur maximale
-        if (strlen(line) > maxCharacters) {
-          printf("Erreur : votre mot contient plus de %d caractères. Veuillez "
-                 "réessayer.\n",
-                 maxCharacters);
-        } else {
-          strDeleteNewLine(line);
-          return line; // L'entrée est valide
-        }
+        strDeleteNewLine(line);
+        return line; // L'entrée est valide
       }
     } else {
       printf("%s\n", messageError);
