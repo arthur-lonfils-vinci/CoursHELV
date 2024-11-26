@@ -17,8 +17,10 @@ int main(int argc, char *argv[]) {
 	printf("Entrez des lignes de texte (Ctrl+D pour terminer):\n");
 
 	while (1) {
-
+        
+        printf("Entrez votre ligne : ");
 		char* ligne = strReadLine("Script terminé", MAX_CHAR);
+
 		if (ligne == NULL) {
 			break;
 		}
