@@ -20,8 +20,8 @@ CREATE TABLE project_schema.clients
 (
     id_client       SERIAL PRIMARY KEY,
     nom_utilisateur VARCHAR(40)  NOT NULL UNIQUE CHECK ( TRIM(nom_utilisateur) <> ' ' ),
-    email           VARCHAR(120) NOT NULL CHECK ( TRIM(email) <> ' ' ),
-    mot_de_passe    VARCHAR(50)  NOT NULL CHECK ( TRIM(mot_de_passe) <> ' ' )
+    email           VARCHAR(120) UNIQUE NOT NULL CHECK ( TRIM(email) <> ' ' ),
+    mot_de_passe    VARCHAR(60)  NOT NULL CHECK ( TRIM(mot_de_passe) <> ' ' )
 );
 
 CREATE TABLE project_schema.artistes
@@ -67,7 +67,7 @@ CREATE TABLE project_schema.reservations
 
 --FUNCTION----------------------------
 
-CREATE OR REPLACE FUNCTION ajouterSalle(add_nom VARCHAR, add_ville VARCHAR, add_capacite VARCHAR)
+CREATE OR REPLACE FUNCTION ajouterSalle(add_nom VARCHAR, add_ville VARCHAR, add_capacite INTEGER)
     RETURNS INTEGER AS
 $$
 DECLARE
@@ -253,6 +253,29 @@ CREATE TRIGGER verify_concert_exists
 
 --------------------------------------------
 
+CREATE OR REPLACE FUNCTION check_clients()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM project_schema.clients
+        WHERE email = NEW.email
+    ) THEN
+        RAISE EXCEPTION 'The client with email % already exists', NEW.email;
+    END IF;
+
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER verify_clients
+    BEFORE INSERT ON project_schema.clients
+    FOR EACH ROW EXECUTE FUNCTION check_clients();
+
+
+--------------------------------------------
+
 CREATE OR REPLACE FUNCTION check_reservation()
     RETURNS TRIGGER AS
 $$
@@ -379,24 +402,54 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--Ajouter une fonction qui retourne les événements d’une salle donnée avec les informations suivantes :
+--nom de l’événement, date de l’événement, nom de la salle, nom de l’artiste, prix, complet (booléen).
 
+CREATE OR REPLACE FUNCTION get_evenements_salle(p_nom_salle VARCHAR)
+    RETURNS TABLE (
+        nom_event VARCHAR,
+        date_event DATE,
+        salle VARCHAR,
+        artiste VARCHAR,
+        prix DOUBLE PRECISION,
+        complet BOOLEAN
+    ) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT e.nom, e.date_evenement, s.nom, STRING_AGG(a.nom, ' + ')::VARCHAR, e.prix,
+           CASE WHEN e.nb_places_restantes = 0 THEN TRUE ELSE FALSE END
+    FROM project_schema.evenements e
+    JOIN project_schema.salles s ON e.salle = s.id_salle
+    JOIN project_schema.concerts c ON c.date_evenement = e.date_evenement AND c.salle = e.salle
+    JOIN project_schema.artistes a ON c.artiste = a.id_artiste
+    WHERE s.nom = p_nom_salle
+    GROUP BY e.nom, e.date_evenement, s.nom, e.prix,
+             CASE WHEN e.nb_places_restantes = 0 THEN TRUE ELSE FALSE END
+    ORDER BY e.date_evenement;
+END;
+$$ LANGUAGE plpgsql;
 
 
 --VIEWS----------------------------
 
-CREATE OR REPLACE VIEW festivalsFuturs (nom, date_premier, date_dernier, somme_prix)
+CREATE OR REPLACE VIEW project_schema.festivalsFuturs (nom, date_premier, date_dernier, somme_prix)
 AS SELECT f.nom, MIN(e.date_evenement), MAX(e.date_evenement), SUM(e.prix)
 FROM project_schema.festivals f
 JOIN project_schema.evenements e ON f.id_festival = e.festival
 WHERE e.date_evenement >= CURRENT_DATE
 GROUP BY f.nom;
 
-CREATE OR REPLACE VIEW reservationsClient (nom_client, nom_evenement, date_evenement, salle_evenement, num_reservation, nb_tickets)
+CREATE OR REPLACE VIEW project_schema.reservationsClient (nom_client, nom_evenement, date_evenement, salle_evenement, num_reservation, nb_tickets)
 AS SELECT c.nom_utilisateur, e.nom, r.date_evenement, r.salle, r.num_reservation, r.nb_tickets
 FROM project_schema.reservations r
 JOIN project_schema.evenements e ON r.salle = e.salle AND r.date_evenement = e.date_evenement
 JOIN project_schema.clients c ON r.client = c.id_client
 ORDER BY c.nom_utilisateur, r.date_evenement, r.salle, r.num_reservation;
+
+CREATE OR REPLACE VIEW project_schema.evenements_salle_view AS
+SELECT *
+FROM get_evenements_salle('Salle1'); -- Replace 1 with the desired id_salle
 
 --SELECT
 
@@ -407,16 +460,16 @@ SELECT ajouterfestival('Kontu Festival');
 
 SELECT ajouterartiste('Mathieu','be');
 SELECT ajoutersalle('Salle1','Bruxelles',567);
-SELECT ajouterevenement(1,'20-11-2024','KontuFestival',45,5600,1);
-SELECT ajouterConcert(1, '20-11-2024', '13:40', 1);
+SELECT ajouterevenement(1,'08-12-2024','KontuEvent',45,5600,1);
+SELECT ajouterConcert(1, '08-12-2024', '13:40', 1);
 
 SELECT ajouterartiste('Alexandre','be');
 SELECT ajoutersalle('Salle2','Bruxelles',567);
-SELECT ajouterevenement(2,'21-11-2024','KontuSansBere',30,4500,1);
-SELECT ajouterConcert(2, '21-11-2024', '16:40', 2);
+SELECT ajouterevenement(2,'15-12-2024','KontuSansBere',30,4500,1);
+SELECT ajouterConcert(2, '15-12-2024', '16:40', 2);
 
-SELECT ajouterReservation(1, '20-11-2024', 2, 1);
-SELECT ajouterreservation(1, '20-11-2024', 1, 1);
---SELECT ajouterreservation(1, '20-11-2024', 2, 1); --Error - Exception
+SELECT ajouterReservation(1, '08-12-2024', 2, 1);
+SELECT ajouterreservation(1, '08-12-2024', 1, 1);
+SELECT ajouterreservation(2, '15-12-2024', 2, 1); --Error - Exception
 SELECT reserverfestival(1, 3, 2);
 --SELECT reserverFestival(1, 4, 1); --Error - Exception

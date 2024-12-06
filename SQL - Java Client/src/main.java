@@ -6,6 +6,6 @@ public class main {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
         }
-        new InterfaceClient();
+        //new ConnectionManager();
     }
 }
