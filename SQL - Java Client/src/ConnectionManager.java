@@ -1,27 +1,30 @@
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    private static java.sql.Connection conn = null;
-    private ConnectionManager() {
-    }
-    public static java.sql.Connection getInstance() {
-        if (conn == null) {
-            try {
-                String url = "jdbc:postgresql://localhost:5432/postgres";
-                String user = "postgres";
-                String password = "Guepari28";
 
-                conn = DriverManager.getConnection(url, user, password);
-                System.out.println("Connexion établie !");
-            } catch (SQLException e) {
-                System.out.println("Erreur de connexion : " + e.getMessage());
-            }
-        }
-        return conn;
+    // Database configuration properties (adjust as necessary)
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String DB_USER = "postgres";
+    private static final String DB_PASSWORD = "Guepari28";
+
+    // Private constructor to prevent instantiation
+    ConnectionManager() {}
+
+    // Always return a new connection on every call
+    public static Connection getInstance() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
+    // Test connection (Optional, useful for debugging or manual testing)
     public static void main(String[] args) {
-        getInstance();
+        try (Connection conn = ConnectionManager.getInstance()) {
+            if (conn != null && !conn.isClosed()) {
+                System.out.println("Connexion établie avec succès !");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur de connexion : " + e.getMessage());
+        }
     }
 }

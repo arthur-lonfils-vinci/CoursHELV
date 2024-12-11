@@ -402,10 +402,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--Ajouter une fonction qui retourne les reservations d’un client avec les informations suivantes :
+--nom du client, nom de l’événement, date de l’événement, nom de la salle, numéro de la réservation, nombre de tickets.
+
+CREATE OR REPLACE FUNCTION project_schema.get_reservation_client(p_id_client INTEGER)
+    RETURNS TABLE (
+        num_reservation INTEGER,
+        nom_client VARCHAR,
+        nom_evenement VARCHAR,
+        date_evenement DATE,
+        salle_evenement VARCHAR,
+        nb_tickets INTEGER
+    ) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT r.num_reservation, c.nom_utilisateur, e.nom, r.date_evenement, s.nom, r.nb_tickets
+    FROM project_schema.reservations r
+    JOIN project_schema.evenements e ON r.salle = e.salle AND r.date_evenement = e.date_evenement
+    JOIN project_schema.clients c ON r.client = c.id_client
+    JOIN project_schema.salles s ON r.salle = s.id_salle
+    WHERE c.id_client = p_id_client
+    ORDER BY r.num_reservation;
+END;
+$$ LANGUAGE plpgsql;
+
 --Ajouter une fonction qui retourne les événements d’une salle donnée avec les informations suivantes :
 --nom de l’événement, date de l’événement, nom de la salle, nom de l’artiste, prix, complet (booléen).
 
-CREATE OR REPLACE FUNCTION get_evenements_salle(p_nom_salle VARCHAR)
+CREATE OR REPLACE FUNCTION project_schema.get_evenements_salle(p_nom_salle VARCHAR)
     RETURNS TABLE (
         nom_event VARCHAR,
         date_event DATE,
@@ -430,6 +454,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--Ajouter une fonction qui retourne les événements auquels participe un artiste
+--avec les informations suivantes : nom de l’événement, date de l’événement, nom de la salle, prix, complet (booléen).
+
+CREATE OR REPLACE FUNCTION project_schema.get_evenements_artiste(p_name_artiste VARCHAR)
+    RETURNS TABLE (
+        nom_event VARCHAR,
+        date_event DATE,
+        salle VARCHAR,
+        prix DOUBLE PRECISION,
+        complet BOOLEAN
+    ) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT e.nom, e.date_evenement, s.nom, e.prix,
+           CASE WHEN e.nb_places_restantes = 0 THEN TRUE ELSE FALSE END
+    FROM project_schema.evenements e
+    JOIN project_schema.salles s ON e.salle = s.id_salle
+    JOIN project_schema.concerts c ON c.date_evenement = e.date_evenement AND c.salle = e.salle
+    JOIN project_schema.artistes a ON c.artiste = a.id_artiste
+    WHERE a.nom = p_name_artiste
+    ORDER BY e.date_evenement;
+END;
+$$ LANGUAGE plpgsql;
 
 --VIEWS----------------------------
 
@@ -453,23 +500,25 @@ FROM get_evenements_salle('Salle1'); -- Replace 1 with the desired id_salle
 
 --SELECT
 
-SELECT ajouterclient('Mathieu','mathieu@kontu.be','MICHELMICHEL');
-SELECT ajouterclient('Alexandre','alexandre@kontu.be','ALEXALEX');
+SELECT ajouterclient('Mathieu','mathieu@kontu.be','pwd');
+SELECT ajouterclient('Alexandre','alexandre@kontu.be','pwd');
 
 SELECT ajouterfestival('Kontu Festival');
 
 SELECT ajouterartiste('Mathieu','be');
 SELECT ajoutersalle('Salle1','Bruxelles',567);
-SELECT ajouterevenement(1,'08-12-2024','KontuEvent',45,5600,1);
-SELECT ajouterConcert(1, '08-12-2024', '13:40', 1);
+SELECT ajouterevenement(1,'08-01-2025','KontuEvent',45,5600,1);
+SELECT ajouterConcert(1, '08-01-2025', '13:40', 1);
 
 SELECT ajouterartiste('Alexandre','be');
 SELECT ajoutersalle('Salle2','Bruxelles',567);
 SELECT ajouterevenement(2,'15-12-2024','KontuSansBere',30,4500,1);
 SELECT ajouterConcert(2, '15-12-2024', '16:40', 2);
 
-SELECT ajouterReservation(1, '08-12-2024', 2, 1);
-SELECT ajouterreservation(1, '08-12-2024', 1, 1);
+SELECT ajouterReservation(1, '08-01-2025', 2, 1);
+SELECT ajouterreservation(1, '08-01-2025', 1, 1);
 SELECT ajouterreservation(2, '15-12-2024', 2, 1); --Error - Exception
 SELECT reserverfestival(1, 3, 2);
+SELECT get_reservation_client(1);
+SELECT get_evenements_artiste('Mathieu');
 --SELECT reserverFestival(1, 4, 1); --Error - Exception

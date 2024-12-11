@@ -14,7 +14,7 @@ public class EventBySalle {
         System.out.println("Entrez le nom de la salle : ");
         String salleName = scanner.next();
 
-        String sql = "SELECT * FROM project_schema.get_evenements_salle(?)";
+        String sql = "SELECT * FROM project_schema.get_evenements_salle(?) ORDER BY date_event";
 
         try (Connection conn = ConnectionManager.getInstance();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
@@ -31,7 +31,7 @@ public class EventBySalle {
                     double prix = rs.getDouble("prix");
                     boolean complet = rs.getBoolean("complet");
 
-                    System.out.printf("Event: %s, Date: %s, Salle: %s, Artiste: %s, Prix: %.2f, Complet: %b%n",
+                    System.out.printf("Event: %s, Date: %s, Salle: %s, Artiste: %s, Prix: %.2f, Complet: %b%n\n",
                             nomEvent, dateEvent, salle, artiste, prix, complet);
             }
         } catch (SQLException e) {
