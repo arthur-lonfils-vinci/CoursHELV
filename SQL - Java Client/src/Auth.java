@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Auth {
     public static Scanner scanner = new Scanner(System.in);
-    private static String TOKEN;
+    public static String TOKEN;
 
     public static void menu() {
         System.out.println("1. Login");
@@ -39,7 +39,7 @@ public class Auth {
         System.out.println("2. Voir mes réservations");
         System.out.println("3. Voir les festivals futurs");
         System.out.println("4. Voir les événements auxquels participe un artiste ");
-        System.out.println("5. Déconnexion");
+        System.out.println("6. Déconnexion");
 
         System.out.println("Votre choix : ");
         int choice = scanner.nextInt();
@@ -49,7 +49,7 @@ public class Auth {
                 EventBySalle.afficherEventBySalle();
                 connectedMenu();
             case 2:
-                MyReservation.afficherMyReservation(TokenManager.getUserIdFromToken(TOKEN));
+                MyReservation.afficherMyReservation();
                 connectedMenu();
             case 3:
                 FestivalViewer.afficherFestivalsFuturs();

@@ -375,7 +375,7 @@ CREATE TRIGGER verify_reservation
 --Ajouter la procédure de réservation d’un certain nombre de places pour tous les événements
 --d’un festival. Si une des réservations échoue, alors aucune réservation ne sera enregistrée.
 
-CREATE OR REPLACE FUNCTION reserverFestival(add_festival INTEGER, add_nb_tickets INTEGER, add_client INTEGER)
+CREATE OR REPLACE FUNCTION project_schema.reserverFestival(add_festival INTEGER, add_nb_tickets INTEGER, add_client INTEGER)
     RETURNS VOID AS $$
 DECLARE
     event RECORD;
@@ -478,6 +478,35 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--Ajouter une fonction qui réserve un certain nombre de places pour un événement, avec comme paramètre l'id client et le nom de l'evenement.
+--Si la réservation échoue, alors une exception sera levée.
+CREATE OR REPLACE FUNCTION project_schema.reserver_evenement(p_id_client INTEGER, p_nom_evenement VARCHAR, p_nb_tickets INTEGER)
+    RETURNS VOID AS $$
+DECLARE
+    event RECORD;
+    reservation_failed BOOLEAN := FALSE;
+BEGIN
+    FOR event IN
+        SELECT *
+        FROM project_schema.evenements e
+        WHERE e.nom = p_nom_evenement
+    LOOP
+        BEGIN
+            PERFORM ajouterReservation(event.salle, event.date_evenement, p_nb_tickets, p_id_client);
+
+            EXCEPTION
+            WHEN OTHERS THEN
+                reservation_failed := TRUE;
+
+        END;
+    END LOOP;
+
+    IF reservation_failed THEN
+        RAISE EXCEPTION 'One or more reservations failed';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 --VIEWS----------------------------
 
 CREATE OR REPLACE VIEW project_schema.festivalsFuturs (nom, date_premier, date_dernier, somme_prix)
@@ -514,10 +543,11 @@ SELECT ajouterartiste('Alexandre','be');
 SELECT ajoutersalle('Salle2','Bruxelles',567);
 SELECT ajouterevenement(2,'15-12-2024','KontuSansBere',30,4500,1);
 SELECT ajouterConcert(2, '15-12-2024', '16:40', 2);
+SELECT ajouterConcert(1, '15-12-2024', '20:00', 2);
 
 SELECT ajouterReservation(1, '08-01-2025', 2, 1);
 SELECT ajouterreservation(1, '08-01-2025', 1, 1);
-SELECT ajouterreservation(2, '15-12-2024', 2, 1); --Error - Exception
+SELECT ajouterreservation(2, '15-12-2024', 2, 1);
 SELECT reserverfestival(1, 3, 2);
 SELECT get_reservation_client(1);
 SELECT get_evenements_artiste('Mathieu');

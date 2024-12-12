@@ -19,7 +19,7 @@ public class EventBySalle {
         try (Connection conn = ConnectionManager.getInstance();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
-            System.out.println("Evènements par salle :");
+            System.out.printf("Evènements pour la salle %s :", salleName);
             pstmt.setString(1, salleName);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -33,10 +33,20 @@ public class EventBySalle {
 
                     System.out.printf("Event: %s, Date: %s, Salle: %s, Artiste: %s, Prix: %.2f, Complet: %b%n\n",
                             nomEvent, dateEvent, salle, artiste, prix, complet);
+                }
+
+                System.out.println("Voulez-vous réserver un évènement ? (y/n)");
+                String reserver = scanner.next();
+                if (reserver.equals("y")) {
+                    ReservationEvent.reserverEvenement();
+                } else {
+                    System.out.println("Retour au menu");
+                    Auth.connectedMenu();
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la requête : " + e.getMessage());
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la requête : " + e.getMessage());
-        }} catch (SQLException e) {
             System.out.println("Erreur lors de la requête : " + e.getMessage());
         }
     }

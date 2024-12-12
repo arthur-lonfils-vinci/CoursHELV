@@ -1,13 +1,13 @@
 import java.sql.*;
 
 public class MyReservation {
-    public static void afficherMyReservation(int idClient) {
+    public static void afficherMyReservation() {
         String sql = "SELECT * FROM project_schema.get_reservation_client(?)";
 
         try (Connection conn = ConnectionManager.getInstance();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
-            pstmt.setInt(1, idClient);
+            pstmt.setInt(1, TokenManager.getUserIdFromToken(Auth.TOKEN));
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 System.out.println("Réservations :");
