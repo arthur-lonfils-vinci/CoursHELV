@@ -1,6 +1,17 @@
 DROP SCHEMA IF EXISTS project_schema CASCADE;
 CREATE SCHEMA project_schema;
 
+--Access control--------------------
+
+CREATE USER etudiant2 WITH PASSWORD 'password';
+GRANT CONNECT ON DATABASE lol TO etudiant2;
+GRANT USAGE ON SCHEMA public TO etudiant2;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO etudiant2;
+
+
+
+--TABLES----------------------------
+
 CREATE TABLE project_schema.festivals
 (
     id_festival SERIAL PRIMARY KEY,
@@ -49,7 +60,7 @@ CREATE TABLE project_schema.concerts
     heure_debut    TIME    NOT NULL,
     salle          INTEGER NOT NULL,
     FOREIGN KEY (date_evenement, salle) REFERENCES project_schema.evenements (date_evenement, salle),
-    CONSTRAINT co_pkey PRIMARY KEY (artiste, date_evenement),
+    CONSTRAINT co_pkey PRIMARY KEY (artiste, date_evenement, heure_debut),
     UNIQUE (salle, date_evenement, heure_debut)
 );
 
@@ -237,9 +248,9 @@ BEGIN
     IF EXISTS (
         SELECT *
         FROM project_schema.concerts
-        WHERE date_evenement = NEW.date_evenement AND salle = NEW.salle
+        WHERE date_evenement = NEW.date_evenement AND salle = NEW.salle AND heure_debut = NEW.heure_debut
     ) THEN
-        RAISE EXCEPTION 'The concert (DATE : %, SALLE : %) already exist', NEW.date_evenement, NEW.salle;
+        RAISE EXCEPTION 'The concert (DATE : %, SALLE : %, HEURE : %) already exist', NEW.date_evenement, NEW.salle, NEW.heure_debut;
     END IF;
 
     RETURN NEW;
@@ -497,7 +508,6 @@ BEGIN
             EXCEPTION
             WHEN OTHERS THEN
                 reservation_failed := TRUE;
-
         END;
     END LOOP;
 
@@ -551,4 +561,6 @@ SELECT ajouterreservation(2, '15-12-2024', 2, 1);
 SELECT reserverfestival(1, 3, 2);
 SELECT get_reservation_client(1);
 SELECT get_evenements_artiste('Mathieu');
+SELECT reserver_evenement(1, 'KontuEvent', 1);
+SELECT reserver_evenement(1, 'KontuSansBere', 1);
 --SELECT reserverFestival(1, 4, 1); --Error - Exception

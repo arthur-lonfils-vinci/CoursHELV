@@ -5,6 +5,7 @@ public class main {
         } catch (ClassNotFoundException e) {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
+
         }
         new ConnectionManager();
 

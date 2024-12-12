@@ -5,9 +5,11 @@ import java.sql.SQLException;
 public class ConnectionManager {
 
     // Database configuration properties (adjust as necessary)
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "Guepari28";
+    private static final String DB_URL = "jdbc:postgresql://172.19.236.180:5432/postgres";
+    //private static final String DB_USER = "postgres";
+    //private static final String DB_PASSWORD = "Guepari28";
+    private static final String DB_USER = "etudiant2";
+    private static final String DB_PASSWORD = "password";
 
     // Private constructor to prevent instantiation
     ConnectionManager() {}
