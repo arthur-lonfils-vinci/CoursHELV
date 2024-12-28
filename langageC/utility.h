@@ -23,6 +23,8 @@ char* strToUpper(char* str);
 
 char* strToLower(char* str);
 
+char* strDeleteSpaces(char* str);
+
 char* strReadLine(char* messageError, int maxCharactere);
 
 bool strCompareString(char* str1, char* str2);

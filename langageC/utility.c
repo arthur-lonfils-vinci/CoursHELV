@@ -143,47 +143,85 @@ char *strToLower(char *str) {
   return str;
 }
 
+/*Function to delete all the spaces in a string
+ * char[] str = the string to delete spaces
+ * @return char[] str = the string without spaces
+ * */
+char *strDeleteSpaces(char *str) {
+  str = strDeleteNewLine(str);
+  int j = 0;
+  for (int i = 0; i < strLength(str); i++) {
+    if (str[i] != ' ') {
+      str[j] = str[i];
+      j++;
+    }
+  }
+  str[j] = '\0';
+  return str;
+}
+
 /*Function to read a line from the user
  * @return char* line = the line read from the user
  * */
 void clearBuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF)
-    ;
+    int c;
+    // Return if EOF encountered to handle ctrl+d/ctrl+z
+    if ((c = getchar()) == EOF) {
+        return;
+    }
+    // Continue clearing only if not already at end of line
+    while (c != '\n' && (c = getchar()) != EOF); 
 }
 
-char *strReadLine(char *messageError, int maxCharacters) {
-  char *line = NULL;
-  while (1) {
-    line = (char *)malloc(maxCharacters + 1);
-    // Lire une ligne avec fgets
-    if (fgets(line, maxCharacters + 1, stdin)) {
-      // Vérifier si l'entrée dépasse la limite autorisée
-      if (line[strlen(line) - 1] != '\n') {
-        // La ligne est trop longue, car il n'y a pas de '\n'
-          printf("Erreur : votre mot est trop long. Veuillez réessayer.\n");
-          clearBuffer();
-      } else {
-        // Retirer le '\n' de la fin
-        line = strDeleteNewLine(line);
-       
-        // Vérifier si la ligne n'est pas égale à '\n'
-        if (strLength(line) == 0) {
-          printf("%s\n", messageError);
-          free(line);
-          clearBuffer();
-          return NULL;
-        }
-        strDeleteNewLine(line);
-        return line; // L'entrée est valide
-      }
-    } else {
-      printf("%s\n", messageError);
-      free(line);
-      clearBuffer();
-      return NULL;
+char* strReadLine(char *messageError, int maxCharacters) {
+    if (maxCharacters <= 0 || messageError == NULL) {
+        return NULL;
     }
-  }
+
+    char *line = malloc(maxCharacters + 1);
+    if (line == NULL) {
+        return NULL;
+    }
+
+    // if crtl+d is pressed
+    if (fgets(line, maxCharacters + 1, stdin) == NULL) {
+        free(line);
+        printf("if 1\n");
+        printf("%s\n", messageError);
+        clearBuffer();
+        return NULL;
+    }
+
+    // Check for empty input (return NULL if there are only spaces)
+    if (strLength(strDeleteSpaces(line)) == 0) {
+        free(line);
+        printf("if 2\n");
+        printf("ERROR: you cannot have only spaces\n");
+        return NULL;
+    }
+
+
+    // Check if input was too long (no newline found)
+    if (strlen(line) > maxCharacters) {
+        printf("Erreur : votre mot est trop long. Veuillez réessayer.\n");
+        free(line);
+        clearBuffer();
+        return NULL;
+    }
+
+    // Remove trailing newline
+    line = strDeleteNewLine(line);
+    // Check for empty input after removing newline
+    if (strLength(line) == 0) {
+        free(line);
+        printf("if 3\n");
+        printf("%s\n", messageError);
+        return NULL;
+    }
+
+    clearBuffer();
+
+    return line;
 }
 
 /*Function to compare two strings

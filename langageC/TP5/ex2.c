@@ -1,6 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
-//#include "string.h"
+#include "string.h"
 
 #include "../utility.h"
 
@@ -8,9 +8,25 @@
 
 int main(int argc, char *argv[]) {
 
+
+    char** tab = (char**)malloc((argc-1) * sizeof(char*));
+
+    if (tab == NULL) {
+        return 0;
+    }
+
+    for (int i = 1; i < argc; i++) {
+        tab[i-1] = (char*)malloc((strLength(argv[i])+1) * sizeof(char));
+        if (tab[i-1] == NULL) {
+            matFreeMatrice(tab, argc-1);
+            return 0;
+        }
+        strcpy(tab[i-1], argv[i]);
+    }
+
 	for (int i = 1; i < argc; i++) {
 		printf("Param n°%d: %s\n", i, argv[i]);
-        argv[i] = strToLower(argv[i]);
+        tab[i-1] = strToLower(tab[i-1]);
 	}
 
 	int countNonLu = 0;
@@ -33,7 +49,7 @@ int main(int argc, char *argv[]) {
 
         ligne = strToLower(ligne);
 
-		int isFound = strFindAndCountString(argv, argc, ligne);
+		int isFound = strFindAndCountString(tab, argc, ligne);
 		if (isFound == -1) {
 			countNonLu++;
 		}
@@ -42,6 +58,8 @@ int main(int argc, char *argv[]) {
 
         free(ligne);
 	}
+
+    matFreeMatrice(tab, argc-1);
 
 	printf("Nombre de non lu: %d\n", countNonLu);
 
