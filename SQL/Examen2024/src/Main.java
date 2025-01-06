@@ -8,7 +8,7 @@ public class Main {
     private final static String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static Connection connection;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         initialiserConnection();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the nationality of the participant you want to view: ");
