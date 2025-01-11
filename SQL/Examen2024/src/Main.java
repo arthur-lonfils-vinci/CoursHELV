@@ -26,8 +26,6 @@ public class Main {
             e.printStackTrace();
         }
         scanner.close();
-
-
     }
 
     private static void initialiserConnection(){

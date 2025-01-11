@@ -1,8 +1,5 @@
 package domaine;
 
-public class QueryFactory {
-    public static Query getQuery() {
-        return new QueryImpl();
-    }
+public interface QueryFactory {
+    Query getQuery();
 }
-
