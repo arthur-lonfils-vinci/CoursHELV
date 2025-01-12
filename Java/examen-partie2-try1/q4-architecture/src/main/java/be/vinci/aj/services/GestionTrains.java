@@ -4,7 +4,7 @@ import be.vinci.aj.domain.*;
 
 public class GestionTrains {
 
-    TrainFactory trainFactory;
+    private TrainFactory trainFactory;
 
     public GestionTrains(TrainFactory trainFactory) {
         this.trainFactory = trainFactory;
@@ -31,6 +31,7 @@ public class GestionTrains {
         train1.demarrer();
         train2.demarrer();
         train3.demarrer();
+
     }
 
 }

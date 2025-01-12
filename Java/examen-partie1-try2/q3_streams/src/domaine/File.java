@@ -117,8 +117,11 @@ public class File {
 
     /**
      * Prend toutes les permissions non expirées d'un utilisateur sur ce fichier, et les groupe en une seule permission
+     * <p>
      * C'est équivalent à faire un OU logique sur toutes les permissions
+     * <p>
      * La date d'expiration de la permission groupée est la date du jour (now)
+     * <p>
      * Par exemple si on a les 3 permissions suivantes:
      * R__
      * _W_
@@ -128,7 +131,8 @@ public class File {
      * @return
      */
     public Permission groupedNonExpiredUserPermissions(User user){
-        return permissions.stream()
+        return permissions
+                .stream()
                 .filter(e -> e.getUser().equals(user))
                 .filter(e -> !e.isExpired())
                 .reduce(new Permission(user, this, false, false, false, LocalDate.now()),
