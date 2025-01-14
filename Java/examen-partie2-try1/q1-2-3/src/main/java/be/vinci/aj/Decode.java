@@ -19,13 +19,13 @@ public class Decode {
             System.out.println("Fields:");
             for(Field field: clazz.getDeclaredFields()){
                 field.setAccessible(true);
-                System.out.println("- "+field.getName()+" | "+field.getType().getTypeName()+" | "+field.get(object));
+                System.out.println("- "+field.getName()+" | "+field.getType().getSimpleName()+" | "+field.get(object));
             }
 
             System.out.println("Methods:");
             for (Method method : clazz.getDeclaredMethods()) {
                 method.setAccessible(true);
-                System.out.println("- "+method.getName()+" | "+method.getReturnType().getTypeName()+" | "+method.invoke(object));
+                System.out.println("- "+method.getName()+" | "+method.getReturnType().getSimpleName()+" | "+method.invoke(object));
             }
 
 

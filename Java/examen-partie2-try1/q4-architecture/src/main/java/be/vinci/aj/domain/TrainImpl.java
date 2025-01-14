@@ -19,7 +19,8 @@ public class TrainImpl implements Train {
         this.tempsParcours = tempsParcours;
     }
 
-    public TrainImpl(){}
+    public TrainImpl() {}
+
 
     /**
      * Permet d'ajouter un véhicule (locomotive/wagon) au Train.
