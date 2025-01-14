@@ -46,6 +46,17 @@ interface JwtPayload {
   iat: number; // Issued at time (in seconds since the epoch)
 }
 
+interface Book {
+  id: number;
+  title: string;
+  author: string;
+  creationDate: string;
+  image?: string;
+}
+
+type NewBook = Omit<Book, "id">;
+
+
 export type {
   Pizza,
   NewPizza,
@@ -57,4 +68,6 @@ export type {
   PotentialUser,
   AuthenticatedRequest,
   JwtPayload,
+  Book,
+  NewBook,
 };
