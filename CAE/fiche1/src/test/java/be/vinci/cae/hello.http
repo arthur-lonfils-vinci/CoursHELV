@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:8080
+
+### Get the standard message
+GET {{baseUrl}}/hello/
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response content-type is json", function() {
+        var type = response.contentType.mimeType;
+        client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+    });
+
+    client.test("No parameters returns Hello World", function() {
+        var body = response.body
+        console.log(body)
+        client.assert(response.body.message == "Hello World", "Cannot find 'World' in body");
+    });
+%}
+
+### Get the custom message
+GET {{baseUrl}}/hello/?name=Sarah
+
+> {%
+    client.test("Name parameters returns proper name", function() {
+        var body = response.body
+        console.log(body)
+        client.assert(response.body.message == "Hello Sarah", "Cannot find 'Sarah' in body");
+    });
+%}
