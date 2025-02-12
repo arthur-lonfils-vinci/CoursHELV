@@ -1,0 +1,21 @@
+api test:
+  image: maven:3.9.9-amazoncorretto-21
+  script:
+    - cd api
+    - mvn clean test
+  artifacts:
+    paths:
+      - api/target/reports/
+      - api/target/site/
+      - api/target/surefire-reports/
+
+frontend test:
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
+    - npm run coverage
+  artifacts:
+    paths:
+      - frontend/coverage/

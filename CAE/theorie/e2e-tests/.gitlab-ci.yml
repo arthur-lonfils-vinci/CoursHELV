@@ -1,0 +1,80 @@
+stages:
+  - test
+  - e2e
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+api test:
+  stage: test
+  image: maven:3.9.9-amazoncorretto-21
+  cache:
+    key:
+      files:
+        - api/pom.xml
+    paths:
+      - $CI_PROJECT_DIR/.m2/repository
+  script:
+    - cd api
+    - mvn clean test
+  artifacts:
+    paths:
+      - api/target/reports/
+      - api/target/site/
+      - api/target/surefire-reports/
+
+frontend test:
+  stage: test
+  image: node:20
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+    paths:
+      - frontend/node_modules
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
+    - npm run coverage
+  artifacts:
+    paths:
+      - frontend/coverage/
+
+e2e tests:
+  stage: e2e
+  image: mcr.microsoft.com/playwright:v1.50.0-jammy
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  cache:
+    key:
+      files:
+        - api/pom.xml
+        - frontend/package-lock.json
+    paths:
+      - $CI_PROJECT_DIR/.m2/repository
+      - frontend/node_modules
+      - e2e/node_modules
+  before_script:
+    - apt update -y
+    - wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
+    - apt install ./jdk-21_linux-x64_bin.deb
+    - apt install -y maven docker-compose-v2
+    - docker compose -f api/docker-compose.yaml up --build -d
+    - sleep 5
+    - cd api
+    - mvn clean spring-boot:run -Dspring-boot.run.profiles=test &
+    - sleep 30
+    - cd ../frontend
+    - npm install
+    - npm run dev &
+    - sleep 30
+    - cd ../e2e
+    - npm install
+  script:
+    - npx playwright test
+  artifacts:
+    paths:
+      - e2e/playwright-report/
+      - e2e/test-results/
