@@ -1,0 +1,64 @@
+######### NORMAL OPERATION  ###########
+
+### Read all pizzas
+GET http://localhost:8080/pizzas
+
+### Read all pizzas with File variable
+@baseUrl = http://localhost:8080
+
+GET {{baseUrl}}/pizzas
+
+### Create a pizza by using the admin account
+#### First login as the admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"admin",
+  "password":"admin"
+}
+
+> {% client.global.set("adminToken", response.body.token) %}
+
+#### Create a pizza with the admin token
+POST {{baseUrl}}/pizzas
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "title":"Magic Green",
+  "content":"Epinards, Brocolis, Olives vertes, Basilic"
+}
+
+######### ERROR OPERATION  ###########
+
+### 1. Create a pizza without a token
+POST {{baseUrl}}/pizzas
+Content-Type: application/json
+
+{
+  "title":"Magic Green",
+  "content":"Epinards, Brocolis, Olives vertes, Basilic"
+}
+
+### 2. Create a pizza without being the admin, use manager account
+#### 2.1 First login as the manager
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"manager",
+  "password":"manager"
+}
+
+> {% client.global.set("managerToken", response.body.token) %}
+
+#### 2.2 Try to create a pizza with the manager token
+POST {{baseUrl}}/pizzas
+Content-Type: application/json
+Authorization: {{managerToken}}
+
+{
+  "title":"Magic Green",
+  "content":"Epinards, Brocolis, Olives vertes, Basilic"
+}
