@@ -46,7 +46,7 @@ public class MainStats {
     }
 
     System.out.println("Le joueur 1 gagne " + 1.0 * p1 / NBR + "% des parties");
-    System.out.println("Il y a une égalité " + 1.0 * tie / NBR + "% des parties");
+    System.out.println("Il y a une ï¿½galitï¿½ " + 1.0 * tie / NBR + "% des parties");
     System.out.println("Le joueur 2 gagne " + 1.0 * p2 / NBR + "% des parties");
   }
 
