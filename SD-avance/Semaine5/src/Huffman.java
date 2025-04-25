@@ -95,6 +95,10 @@ public class Huffman {
         sb.append(current.ch);
         current = root;
       }
+
+      if (sb.length() == root.freq) {
+        break;
+      }
     }
     return sb.toString();
   }

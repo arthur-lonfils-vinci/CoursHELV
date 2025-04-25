@@ -43,8 +43,8 @@ public class Main {
     System.out.println(texteOriginal);
 
     System.out.println("-----------------------------------------------------");
-    System.out.println("Test avec le fichier Huffman.java");
-    String s5=HuffmanReadFile.loadFile(new File("src/Huffman.java"));
+    System.out.println("Test avec le fichier 11-0.txt");
+    String s5=HuffmanReadFile.loadFile(new File("11-0.txt"));
     assert s5 != null;
     Map<Character, Integer> freq5 = Huffman.computeFreq(s5);
     Huffman.Node root5 = Huffman.buildTree(freq5);
