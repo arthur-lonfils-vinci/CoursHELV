@@ -1,0 +1,8 @@
+### Mac
+.DS_Store
+### Windows
+Thumbs.db
+### Linux
+lost+found
+.env
+*.env

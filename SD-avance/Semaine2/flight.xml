@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flights>
+	<airport iata="FCO"
+		name="Leonardo da VinciÃ¢â‚¬â€œFiumicino Airport">
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">AMS</flight>
+		<flight airline="Alitalia">BCN</flight>
+		<flight airline="Alitalia">FRA</flight>
+		<flight airline="Alitalia">IST</flight>
+		<flight airline="Alitalia">LAX</flight>
+		<flight airline="Alitalia">MAD</flight>
+		<flight airline="Alitalia">MUC</flight>
+		<flight airline="British Airways">LGW</flight>
+		<flight airline="Blue Panorama Airlines">DME</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Lufthansa">EWR</flight>
+	</airport>
+	<airport iata="AMS" name="Amsterdam Airport Schiphol">
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">DXB</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="British Airways">LGW</flight>
+		<flight airline="China Southern Airlines">PEK</flight>
+		<flight airline="Delta Air Lines">ATL</flight>
+		<flight airline="Delta Air Lines">DFW</flight>
+		<flight airline="Delta Air Lines">EWR</flight>
+		<flight airline="Delta Air Lines">IAH</flight>
+		<flight airline="Delta Air Lines">JFK</flight>
+		<flight airline="Delta Air Lines">LAX</flight>
+		<flight airline="Delta Air Lines">ORD</flight>
+		<flight airline="Ethiopian Airlines">FRA</flight>
+		<flight airline="Transavia Holland">BCN</flight>
+		<flight airline="KLM Royal Dutch Airlines">IST</flight>
+		<flight airline="KLM Royal Dutch Airlines">MAD</flight>
+		<flight airline="KLM Royal Dutch Airlines">MUC</flight>
+		<flight airline="easyJet">STN</flight>
+	</airport>
+	<airport iata="FRA"
+		name="Frankfurt am Main International Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Air Berlin">DME</flight>
+		<flight airline="Air Berlin">MAD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Air France">JFK</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Ethiopian Airlines">AMS</flight>
+		<flight airline="Ethiopian Airlines">BCN</flight>
+		<flight airline="Ethiopian Airlines">MUC</flight>
+		<flight airline="Lufthansa">DEN</flight>
+		<flight airline="Lufthansa">EWR</flight>
+		<flight airline="Lufthansa">IAH</flight>
+		<flight airline="Lufthansa">IST</flight>
+		<flight airline="Lufthansa">LAX</flight>
+		<flight airline="Lufthansa">ORD</flight>
+	</airport>
+	<airport iata="JFK" name="John F Kennedy International Airport">
+		<flight airline="American Airlines">BCN</flight>
+		<flight airline="American Airlines">CDG</flight>
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">FCO</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">MAD</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">FRA</flight>
+		<flight airline="JetBlue Airways">DEN</flight>
+		<flight airline="JetBlue Airways">DXB</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Lufthansa">MUC</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+	</airport>
+	<airport iata="DEN" name="Denver International Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air Canada">ATL</flight>
+		<flight airline="JetBlue Airways">JFK</flight>
+		<flight airline="Frontier Airlines">IAH</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="United Airlines">EWR</flight>
+	</airport>
+	<airport iata="IST" name="AtatÃƒÂ¼rk International Airport">
+		<flight airline="Onur Air">CDG</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="KLM Royal Dutch Airlines">AMS</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="Lufthansa">MUC</flight>
+		<flight airline="Turkish Airlines">BCN</flight>
+		<flight airline="Turkish Airlines">IAH</flight>
+		<flight airline="Turkish Airlines">JFK</flight>
+		<flight airline="Turkish Airlines">LAX</flight>
+		<flight airline="Turkish Airlines">LGW</flight>
+		<flight airline="Turkish Airlines">MAD</flight>
+		<flight airline="Turkish Airlines">ORD</flight>
+	</airport>
+	<airport iata="STN" name="London Stansted Airport">
+		<flight airline="Ryanair">BCN</flight>
+		<flight airline="Ryanair">MAD</flight>
+		<flight airline="easyJet">AMS</flight>
+		<flight airline="easyJet">MUC</flight>
+	</airport>
+	<airport iata="DME" name="Domodedovo International Airport">
+		<flight airline="Air Berlin">FRA</flight>
+		<flight airline="Air Berlin">MUC</flight>
+		<flight airline="British Airways">LHR</flight>
+		<flight airline="Blue Panorama Airlines">FCO</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Iberia Airlines">BCN</flight>
+		<flight airline="Iberia Airlines">MAD</flight>
+		<flight airline="Singapore Airlines">IAH</flight>
+		<flight airline="easyJet">LGW</flight>
+	</airport>
+	<airport iata="LAX" name="Los Angeles International Airport">
+		<flight airline="American Airlines">DEN</flight>
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">IAH</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">MAD</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="JetBlue Airways">DXB</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="Lufthansa">MUC</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+		<flight airline="United Airlines">EWR</flight>
+	</airport>
+	<airport iata="LGW" name="London Gatwick Airport">
+		<flight airline="British Airways">AMS</flight>
+		<flight airline="British Airways">BCN</flight>
+		<flight airline="British Airways">FCO</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+		<flight airline="easyJet">CDG</flight>
+		<flight airline="easyJet">DME</flight>
+		<flight airline="easyJet">MAD</flight>
+		<flight airline="easyJet">MUC</flight>
+	</airport>
+	<airport iata="ORD" name="Chicago O'Hare International Airport">
+		<flight airline="American Airlines">ATL</flight>
+		<flight airline="American Airlines">CDG</flight>
+		<flight airline="American Airlines">DEN</flight>
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">EWR</flight>
+		<flight airline="American Airlines">FCO</flight>
+		<flight airline="American Airlines">IAH</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">MAD</flight>
+		<flight airline="American Airlines">PEK</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="Lufthansa">MUC</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+	</airport>
+	<airport iata="MAD"
+		name="Adolfo SuÃƒÂ¡rez MadridÃ¢â‚¬â€œBarajas Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air Berlin">FRA</flight>
+		<flight airline="Air Berlin">MUC</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="British Airways">LHR</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Ryanair">STN</flight>
+		<flight airline="Iberia Airlines">BCN</flight>
+		<flight airline="Iberia Airlines">DME</flight>
+		<flight airline="KLM Royal Dutch Airlines">AMS</flight>
+		<flight airline="Lufthansa">EWR</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+		<flight airline="easyJet">LGW</flight>
+	</airport>
+	<airport iata="CDG"
+		name="Charles de Gaulle International Airport">
+		<flight airline="Onur Air">IST</flight>
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">AMS</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">BCN</flight>
+		<flight airline="Air France">DXB</flight>
+		<flight airline="Air France">EWR</flight>
+		<flight airline="Air France">FCO</flight>
+		<flight airline="Air France">FRA</flight>
+		<flight airline="Air France">IAH</flight>
+		<flight airline="Air France">LAX</flight>
+		<flight airline="Air France">MAD</flight>
+		<flight airline="Air France">MUC</flight>
+		<flight airline="Air France">PEK</flight>
+		<flight airline="easyJet">LGW</flight>
+	</airport>
+	<airport iata="EWR" name="Newark Liberty International Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Lufthansa">BCN</flight>
+		<flight airline="Lufthansa">FCO</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="Lufthansa">MAD</flight>
+		<flight airline="Lufthansa">MUC</flight>
+		<flight airline="United Airlines">DEN</flight>
+		<flight airline="United Airlines">IAH</flight>
+		<flight airline="United Airlines">LAX</flight>
+	</airport>
+	<airport iata="ATL"
+		name="Hartsfield Jackson Atlanta International Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air Canada">DEN</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Air France">EWR</flight>
+		<flight airline="Air France">FCO</flight>
+		<flight airline="Air France">FRA</flight>
+		<flight airline="Air France">IAH</flight>
+		<flight airline="Air France">JFK</flight>
+		<flight airline="Air France">LAX</flight>
+		<flight airline="Air France">MAD</flight>
+		<flight airline="Air France">MUC</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Delta Air Lines">DXB</flight>
+	</airport>
+	<airport iata="DFW"
+		name="Dallas Fort Worth International Airport">
+		<flight airline="American Airlines">ATL</flight>
+		<flight airline="American Airlines">CDG</flight>
+		<flight airline="American Airlines">DEN</flight>
+		<flight airline="American Airlines">EWR</flight>
+		<flight airline="American Airlines">FRA</flight>
+		<flight airline="American Airlines">IAH</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">MAD</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="JetBlue Airways">DXB</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+	</airport>
+	<airport iata="DXB" name="Dubai International Airport">
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">AMS</flight>
+		<flight airline="JetBlue Airways">DFW</flight>
+		<flight airline="JetBlue Airways">IAH</flight>
+		<flight airline="JetBlue Airways">JFK</flight>
+		<flight airline="JetBlue Airways">LAX</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Delta Air Lines">ATL</flight>
+		<flight airline="Emirates">BCN</flight>
+		<flight airline="Emirates">DME</flight>
+		<flight airline="Emirates">FCO</flight>
+		<flight airline="Emirates">FRA</flight>
+		<flight airline="Emirates">IST</flight>
+		<flight airline="Emirates">LGW</flight>
+		<flight airline="Emirates">MAD</flight>
+		<flight airline="Emirates">MUC</flight>
+	</airport>
+	<airport iata="IAH"
+		name="George Bush Intercontinental Houston Airport">
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="JetBlue Airways">DXB</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Delta Air Lines">AMS</flight>
+		<flight airline="Frontier Airlines">DEN</flight>
+		<flight airline="Lufthansa">FRA</flight>
+		<flight airline="Singapore Airlines">DME</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+		<flight airline="United Airlines">EWR</flight>
+		<flight airline="United Airlines">MUC</flight>
+	</airport>
+	<airport iata="LHR" name="London Heathrow Airport">
+		<flight airline="American Airlines">AMS</flight>
+		<flight airline="American Airlines">ATL</flight>
+		<flight airline="American Airlines">BCN</flight>
+		<flight airline="American Airlines">CDG</flight>
+		<flight airline="American Airlines">DEN</flight>
+		<flight airline="American Airlines">DFW</flight>
+		<flight airline="American Airlines">DXB</flight>
+		<flight airline="American Airlines">EWR</flight>
+		<flight airline="American Airlines">FCO</flight>
+		<flight airline="American Airlines">FRA</flight>
+		<flight airline="American Airlines">IAH</flight>
+		<flight airline="American Airlines">IST</flight>
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LAX</flight>
+		<flight airline="American Airlines">MUC</flight>
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="British Airways">DME</flight>
+		<flight airline="British Airways">MAD</flight>
+		<flight airline="British Airways">PEK</flight>
+	</airport>
+	<airport iata="MUC" name="Munich International Airport">
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Air Berlin">DME</flight>
+		<flight airline="Air Berlin">MAD</flight>
+		<flight airline="Air France">ATL</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="Air China">PEK</flight>
+		<flight airline="Cyprus Airways">FRA</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Iberia Airlines">BCN</flight>
+		<flight airline="KLM Royal Dutch Airlines">AMS</flight>
+		<flight airline="Lufthansa">EWR</flight>
+		<flight airline="Lufthansa">IST</flight>
+		<flight airline="Lufthansa">JFK</flight>
+		<flight airline="Lufthansa">LAX</flight>
+		<flight airline="Lufthansa">ORD</flight>
+		<flight airline="easyJet">LGW</flight>
+		<flight airline="easyJet">STN</flight>
+		<flight airline="United Airlines">IAH</flight>
+	</airport>
+	<airport iata="PEK"
+		name="Beijing Capital International Airport">
+		<flight airline="American Airlines">ORD</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="British Airways">LHR</flight>
+		<flight airline="Air China">DXB</flight>
+		<flight airline="Air China">EWR</flight>
+		<flight airline="Air China">FCO</flight>
+		<flight airline="Air China">FRA</flight>
+		<flight airline="Air China">IAH</flight>
+		<flight airline="Air China">IST</flight>
+		<flight airline="Air China">JFK</flight>
+		<flight airline="Air China">LAX</flight>
+		<flight airline="Air China">LGW</flight>
+		<flight airline="Air China">MAD</flight>
+		<flight airline="Air China">MUC</flight>
+		<flight airline="China Southern Airlines">AMS</flight>
+	</airport>
+	<airport iata="BCN" name="Barcelona International Airport">
+		<flight airline="American Airlines">JFK</flight>
+		<flight airline="American Airlines">LHR</flight>
+		<flight airline="Air France">CDG</flight>
+		<flight airline="Alitalia">FCO</flight>
+		<flight airline="British Airways">LGW</flight>
+		<flight airline="Emirates">DXB</flight>
+		<flight airline="Ethiopian Airlines">FRA</flight>
+		<flight airline="Ryanair">STN</flight>
+		<flight airline="Transavia Holland">AMS</flight>
+		<flight airline="Iberia Airlines">DME</flight>
+		<flight airline="Iberia Airlines">MAD</flight>
+		<flight airline="Iberia Airlines">MUC</flight>
+		<flight airline="Lufthansa">EWR</flight>
+		<flight airline="Turkish Airlines">IST</flight>
+	</airport>
+</flights>

@@ -1,0 +1,222 @@
+openapi: 3.1.0
+info:
+  title: CAE exercices fiche3 API
+  description: API de départ pour le tutoriel de la fiche 3 du cours CAE-exercices
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+
+  /auths/login:
+    post:
+      summary: Connexion
+      description: Connexion d'un utilisateur
+      requestBody:
+        required: true
+        description: Identifiants de connexion
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              description: Token de connexion JWT
+              schema:
+                $ref: '#/components/schemas/AuthenticatedUser'
+        '400':
+          description: Requête mal formée
+        '401':
+          description: Identifiants incorrects
+
+  /auths/register:
+    post:
+      summary: Inscription
+      description: Inscription d'un utilisateur
+      requestBody:
+        required: true
+        description: Identifiants de l'utilisateur
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Inscription réussie, renvoie un token JWT
+          content:
+            application/json:
+              description: Token de connexion JWT
+              schema:
+                $ref: '#/components/schemas/AuthenticatedUser'
+        '400':
+          description: Requête mal formée
+        '409':
+          description: Utilisateur déjà existant
+
+  /pizzas:
+
+    get:
+      summary: Liste des pizzas
+      description: Récupération de la liste des pizzas
+      parameters:
+        - name: order
+          in: query
+          required: false
+          description: Ordre de tri, par titre ascendant (+title) ou descendant (-title)
+          schema:
+            type: string
+            enum: [+title, -title]
+            example: +title
+      responses:
+        '200':
+          description: Liste des pizzas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pizza'
+
+    post:
+      summary: Créer une pizza
+      description: Création d'une nouvelle pizza
+      security:
+        - bearerAuth:
+            - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPizza'
+      responses:
+        '200':
+          description: Pizza créée
+          content:
+            application/json:
+              description: Détails de la pizza créée
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        '400':
+          description: Requête mal formée
+        '403':
+          description: Non authentifié
+
+  /pizzas/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID de la pizza
+        schema:
+          type: integer
+          example: 1
+
+    get:
+      summary: Détail d'une pizza
+      description: Récupération du détail d'une pizza
+      responses:
+        '200':
+          description: Détail de la pizza
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        '404':
+          description: Pizza non trouvée
+
+    delete:
+      summary: Supprimer une pizza
+      description: Suppression d'une pizza
+      security:
+        - bearerAuth:
+          - admin
+      responses:
+        '200':
+          description: Pizza supprimée
+          content:
+            application/json:
+              description: Détails de la pizza supprimée
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        '403':
+          description: Non authentifié
+        '404':
+          description: Pizza non trouvée
+
+    patch:
+      summary: Modifier une pizza
+      description: Modification d'une pizza
+      security:
+        - bearerAuth:
+          - admin
+      requestBody:
+        required: true
+        description: Nouveaux détails de la pizza
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPizza'
+      responses:
+        '200':
+          description: Pizza modifiée
+          content:
+            application/json:
+              description: Détails de la pizza modifiée
+              schema:
+                $ref: '#/components/schemas/Pizza'
+        '400':
+          description: Requête mal formée
+        '403':
+          description: Non authentifié
+        '404':
+          description: Pizza non trouvée
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Credentials:
+      type: object
+      properties:
+        username:
+          type: string
+          example: manager
+        password:
+          type: string
+          example: manager
+    AuthenticatedUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: manager
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbmFnZXIiLCJpYXQiOjE1MTYyMzkwMjJ9.4TJok9J
+    NewPizza:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Margherita
+        content:
+          type: string
+          example: Tomate, mozzarella, basilic
+    Pizza:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Margherita
+        content:
+          type: string

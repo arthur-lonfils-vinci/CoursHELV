@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: fiche3_postgres_container
+    environment:
+      POSTGRES_DB: cae_db
+      POSTGRES_USER: cae_user
+      POSTGRES_PASSWORD: cae
+    ports:
+      - "5433:5432"

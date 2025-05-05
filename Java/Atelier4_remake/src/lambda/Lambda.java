@@ -1,5 +1,6 @@
 package lambda;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -15,7 +16,13 @@ public class Lambda {
      */
     public static List<Integer> allMatches(List<Integer> list, Predicate<Integer> match) {
         //TODO
-        return null;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (match.test(list.get(i))) {
+                result.add(list.get(i));
+            }
+        }
+        return result;
     }
 
     /**
@@ -27,7 +34,11 @@ public class Lambda {
      */
     public static List<Integer> transformAll(List<Integer> list, Function<Integer, Integer> transform) {
         //TODO
-        return null;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            result.add(transform.apply(list.get(i)));
+        }
+        return result;
     }
 
 

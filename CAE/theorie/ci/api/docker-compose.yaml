@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: cae_db
+      POSTGRES_USER: cae_user
+      POSTGRES_PASSWORD: cae
+    ports:
+      - "5432:5432"

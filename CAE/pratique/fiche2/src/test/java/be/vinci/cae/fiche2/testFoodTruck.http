@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:8080
+
+### Get the standard message
+GET {{baseUrl}}/foodtrucks/
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response content-type is json", function() {
+        var type = response.contentType.mimeType;
+        client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+    });
+
+    client.test("Should return all drinks", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.length == 2, "Should return 2 foodtrucks");
+    });
+%}
+
+### Get the custom message
+GET {{baseUrl}}/foodtrucks/1
+
+> {%
+
+    client.test("Should return a drink with id 1", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.id == "1", "Should be id 1");
+    });
+%}
+
+### Create a new drink
+POST {{baseUrl}}/foodtrucks/
+Content-Type: application/json
+
+{
+  "name": "Coke & Friends",
+  "address": "Av. des feuilles 27"
+}
+
+### Update a drink
+PUT {{baseUrl}}/foodtrucks/3
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "Explosion & Fun",
+  "address": "Av. des Arbres 42d"
+}
+
+> {%
+
+    client.test("Should update the drink name", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.id == "3", "Should be id 3");
+        client.assert(body.name == "Explosion & Fun", "Should be name Explosion & Fun");
+    });
+%}
+
+### Delete a drink
+DELETE {{baseUrl}}/foodtrucks/5

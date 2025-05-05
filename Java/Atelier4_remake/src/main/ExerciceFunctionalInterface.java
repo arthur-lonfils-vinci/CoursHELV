@@ -32,7 +32,12 @@ public class ExerciceFunctionalInterface {
      * Replacer l'instatiation de la classe EmployeComparator par un lambda
      */
     private static void exComparator() {
-        employes.sort(new EmployeComparator());
+        employes.sort((e1, e2) -> {
+            if (e1.getTaille() == e2.getTaille()){
+                return e1.getNom().compareTo(e2.getNom());
+            }
+            return e2.getTaille() - e1.getTaille();
+        });
         System.out.println("Employés triés:");
         System.out.println(employes);
 
@@ -45,12 +50,12 @@ public class ExerciceFunctionalInterface {
      * remplacer le lambda en paramètre par une instance de celle-ci.
      */
     private static void exMap() {
-        Stream<String> listeNom = employes.stream()
+        Stream<String> listeNomTaMere = employes.stream()
                 .filter(e -> e.getGenre() == Genre.HOMME)
                 .sorted(Comparator.comparingInt(Employe::getTaille)
                         .reversed())
-                .map( e -> e.getNom());
-        listeNom.forEach(System.out::println);
+                .map( new EmployeNomFunction());
+        listeNomTaMere.forEach(System.out::println);
 
     }
 
@@ -61,8 +66,7 @@ public class ExerciceFunctionalInterface {
      * remplacer le lambda en paramètre par une instance de celle-ci.
      */
     private static void exForEach(){
-        employes.forEach(e -> System.out.println(e));
-
+        employes.forEach(new PrintEmploye());
 
     }
 }

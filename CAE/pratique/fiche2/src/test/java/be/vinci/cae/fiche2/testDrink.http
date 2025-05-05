@@ -1,0 +1,75 @@
+@baseUrl = http://localhost:8080
+
+### Get the standard message
+GET {{baseUrl}}/drinks/
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response content-type is json", function() {
+        var type = response.contentType.mimeType;
+        client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+    });
+
+    client.test("Should return all drinks", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.length == 4, "Should return 4 drinks");
+    });
+%}
+
+### Get the custom message
+GET {{baseUrl}}/drinks/1
+
+> {%
+
+    client.test("Should return a drink with id 1", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.id == "1", "Should be id 1");
+    });
+%}
+
+### Create a new drink
+POST {{baseUrl}}/drinks/
+Content-Type: application/json
+
+{
+  "name": "Coke",
+  "price": "1.50",
+  "description": "Yum Coke",
+  "alcoholic": false,
+  "foodTruck": {
+    "id": "1"
+  }
+}
+
+### Update a drink
+PUT {{baseUrl}}/drinks/5
+Content-Type: application/json
+
+{
+  "id": 5,
+  "name": "Pepsi",
+  "price": "1.50",
+  "description": "Yum Yum Pepsi",
+  "alcoholic": false,
+  "foodTruck": {
+    "id": "1"
+  }
+}
+
+> {%
+
+    client.test("Should update the drink name", function() {
+        var body = response.body
+        console.log(body);
+        client.assert(body.id == "5", "Should be id 5");
+        client.assert(body.name == "Pepsi", "Should be name Pepsi");
+    });
+%}
+
+### Delete a drink
+DELETE {{baseUrl}}/drinks/5

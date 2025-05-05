@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:3000
+### Connect with admin
+# @name admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"admin"
+}
+
+### Connect with user
+# @name user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+    "username":"user",
+    "password":"user"
+}
+
+### Get all books
+GET {{baseUrl}}/tickets
+Content-Type:  application/json
+Authorization: {{admin.response.body.token}}
+
+### Get a single book by ID
+GET {{baseUrl}}/tickets/1
+Content-Type:  application/json
+Authorization: {{admin.response.body.token}}
