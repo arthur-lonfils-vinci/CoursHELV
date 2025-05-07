@@ -99,7 +99,7 @@ class FilmRow extends StatelessWidget {
                                 child: Text(
                                   "Director: ${film.director}",
                                   style: Theme.of(context).textTheme.bodyMedium,
-                                ),
+                                ),²²²²
                               ),
                             ],
                           ),
