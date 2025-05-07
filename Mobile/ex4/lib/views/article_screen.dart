@@ -1,19 +1,17 @@
+import 'package:ex4/view_models/article_view_model.dart';
 import 'package:flutter/material.dart';
-
-import '../models/article.dart';
+import 'package:provider/provider.dart';
 
 class ArticleScreen extends StatelessWidget {
   final int articleId;
-  final Article? article;
 
-  const ArticleScreen({super.key, required this.articleId, this.article});
+  const ArticleScreen({super.key, required this.articleId});
 
   @override
   Widget build(BuildContext context) {
     // Use the passed article if available, otherwise look it up using the ID
-    final articleToDisplay =
-        article ??
-        defaultArticles.firstWhere((article) => article.id == articleId);
+    final articleViewModel = Provider.of<ArticleViewModel>(context);
+    final articleToDisplay = articleViewModel.getArticleById(articleId);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +23,7 @@ class ArticleScreen extends StatelessWidget {
             articleToDisplay.read
                 ? const Icon(Icons.check_box)
                 : const Icon(Icons.check_box_outline_blank),
-        onPressed: () {}, // TODO F07 mark as read
+        onPressed: () => articleViewModel.markAsReadOrNot(articleToDisplay.id), // TODO F07 mark as read
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),

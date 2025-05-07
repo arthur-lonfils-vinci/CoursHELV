@@ -1,35 +1,38 @@
+import 'package:ex4/view_models/article_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../models/article.dart';
+import 'package:provider/provider.dart';
 
 class ListScreen extends StatelessWidget {
   const ListScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
-    var showRead = false; // TODO F07 get state from view model
+    final articleViewModel = Provider.of<ArticleViewModel>(context);
+    final showReadState = articleViewModel.showRead;
+    final defaultArticles = articleViewModel.getAllArticles();
     var articles = [
       for (var article in defaultArticles)
-        if (showRead || !article.read) article,
-    ]; // TODO F07 get state from view model
+        if (showReadState || !article.read) article,
+    ]; // Using state from view model
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Articles"),
+        title: const Text('Articles'),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         actions: [
           IconButton(
             icon:
-                showRead
+                articleViewModel.showRead
                     ? const Icon(Icons.check_box)
                     : const Icon(Icons.check_box_outline_blank),
-            onPressed: () {}, // TODO F07 show/hide read articles
+            onPressed: () {
+              articleViewModel.toggleShowRead();
+            }, // TODO F07 show/hide read articles
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {}, // TODO F06 go to form screen
+        onPressed: () => context.go('/article'), // TODO F06 go to form screen
         child: const Icon(Icons.add),
       ),
       body: Padding(
@@ -49,15 +52,14 @@ class ListScreen extends StatelessWidget {
                             article.read
                                 ? const Icon(Icons.check_box)
                                 : const Icon(Icons.check_box_outline_blank),
-                        onPressed: () => {},
+                        onPressed: () => articleViewModel.markAsReadOrNot(article.id), // TODO F07 mark as read
                       ),
                       title: Text(article.title),
                       subtitle: Text(article.author),
-                      onTap: () => context.go('/article/${article.id}', extra: article),
-                      // TODO F06 go to article screen with a path parameter (the article id) and passing the article as an extra argument
+                      onTap: () => context.go('/article/${article.id}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
-                        onPressed: () {}, // TODO F07 delete article
+                        onPressed: () => articleViewModel.removeArticle(article.id), // TODO F07 delete article
                       ),
                     );
                   },

@@ -1,4 +1,8 @@
+import 'package:ex4/models/article.dart';
+import 'package:ex4/view_models/article_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -24,6 +28,7 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final articleViewModel = Provider.of<ArticleViewModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text("New article"),
@@ -65,7 +70,8 @@ class _FormScreenState extends State<FormScreen> {
                 child: const Text("Create article"),
                 onPressed: () {
                   if (key.currentState!.validate()) {
-                    // TODO F07 create article
+                    articleViewModel.addArticle(Article(title: titleController.text, author: authorController.text, content: contentController.text));
+                    context.go("/");
                   }
                 },
               )
