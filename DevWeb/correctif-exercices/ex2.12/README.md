@@ -1,2 +1,0 @@
-# Création de composants intégrés
-
