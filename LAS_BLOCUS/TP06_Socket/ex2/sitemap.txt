@@ -1,0 +1,4 @@
+http://ochoquet.be/syllabusHTML/index.html
+http://ochoquet.be/syllabusHTML/internet.html
+http://ochoquet.be/syllabusHTML/html5.html
+http://ochoquet.be/syllabusHTML/css3.html
