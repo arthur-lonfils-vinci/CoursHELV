@@ -1,0 +1,61 @@
+# Ignore common build/output directories
+node_modules
+build
+dist
+coverage
+out
+web-build
+.android
+.ios
+
+# Ignore lock files and package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+pubspec.lock
+
+# Ignore environment and configuration
+.env
+.env.*
+*.config.*
+*.lock
+
+# Ignore assets and generated files
+*.min.js
+*.map
+*.bundle.js
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.ico
+
+# Ignore platform-specific build folders
+.midea
+.gradle
+.idea
+.vscode
+
+# Ignore test outputs and snapshots
+__snapshots__
+test-results
+*.spec.*
+*.test.*
+
+# Ignore specific types of utility and generated files
+utils.*
+*.g.dart
+*.freezed.dart
+*.pb.dart
+*.mocks.dart
+*.template.dart
+
+# Ignore Java/Maven-specific folders
+target
+*.class
+*.jar
+
+# Ignore logs
+*.log
