@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ChoixOptions {
@@ -6,6 +7,7 @@ public class ChoixOptions {
 	// associe le nom d'une option avec son objet Option correspondant
 	private Map<String, Option> options;
 	// ajouter ici les autres attributs
+	private HashMap<Etudiant, List<Option>> preferencesEtudiants;
 	
 	
 	//constructeur prenant un entier et une suite de string en param�tres
@@ -19,12 +21,15 @@ public class ChoixOptions {
 			options.put(nomOption, new Option(nomOption, nbEtudiantsParOption));
 		}
 		// initialiser les nouveaux attributs
+		this.preferencesEtudiants = new HashMap<Etudiant, List<Option>>();
 	}
 
 	// cette m�thode encode les pr�f�rences des �tudiants
 	// il ne faut pas v�rifier que ces choix soient valides
 	public void ajouterPreferences(Etudiant etu, String choix1, String choix2,
 			String choix3) {
+		if (!preferencesEtudiants.containsKey(etu))
+			preferencesEtudiants.put(etu, List.of(options.get(choix1), options.get(choix2), options.get(choix3)));
 	}
 
 	// cette m�thode est appel�e apr�s que les �tudiants aient donn� leurs pr�f�rences
@@ -34,6 +39,15 @@ public class ChoixOptions {
 	// il faut recourir au troisi�me choix.
 	// Cette m�thode doit faire appel � la m�thode inscrireEtudiant de la classe Option.
 	public void attribuerOptions() {
+		for (Etudiant etu : preferencesEtudiants.keySet()) {
+			List<Option> optionsEtu = preferencesEtudiants.get(etu);
+
+			for (Option option : optionsEtu) {
+				if (option.inscrireEtudiant(etu)) {
+					break;
+				}
+			}
+		}
 	}
 	
 	public String toString(){
