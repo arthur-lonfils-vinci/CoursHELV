@@ -32,6 +32,11 @@ class AppViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addDish(Dish dish) async {
+    await _dishService.addDish(dish);
+    _loadMenu();
+  }
+
   void addToCart(Dish dish) {
     final index = _cart.indexWhere((item) => item.dish.id == dish.id);
 

@@ -55,6 +55,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.go('/add-dish'),
+        child: const Icon(Icons.add),
+      ),
       body: Center(
         child:
             menu.isNotEmpty

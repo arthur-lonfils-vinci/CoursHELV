@@ -2,7 +2,6 @@ import 'package:app_train/models/cart_item.dart';
 import 'package:app_train/models/dish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class CartService {
   static const _cartKey = 'cart';
 
@@ -14,9 +13,9 @@ class CartService {
 
   Future<List<CartItem>> loadCart() async {
     final prefs = await SharedPreferences.getInstance();
-    var menu = prefs.getStringList(_cartKey) ?? [];
-    return List.generate( menu.length, (i) {
-      var item = menu[i].split(',');
+    var cart = prefs.getStringList(_cartKey) ?? [];
+    return List.generate(cart.length, (i) {
+      var item = cart[i].split(',');
       return CartItem(
         dish: Dish(
           name: item[0],
@@ -26,7 +25,6 @@ class CartService {
         ),
         count: int.parse(item[1]),
       );
-    }
-    );
+    });
   }
 }
