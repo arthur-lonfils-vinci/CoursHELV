@@ -1,0 +1,4 @@
+flutter pub add shared_preferences 
+&& flutter pub add go_router 
+&& flutter pub add http 
+&& flutter pub get
