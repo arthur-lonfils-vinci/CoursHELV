@@ -1,9 +1,7 @@
 import 'package:exam_blanc/models/cart_item.dart';
 import 'package:exam_blanc/models/dish.dart';
-import 'package:exam_blanc/services/dish_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 

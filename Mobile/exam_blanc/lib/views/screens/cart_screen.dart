@@ -2,7 +2,6 @@ import 'package:exam_blanc/view_models/app_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/cart_item.dart';
 import '../widgets/cart_item_widget.dart';
 
 class CartScreen extends StatelessWidget {
