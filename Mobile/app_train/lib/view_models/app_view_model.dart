@@ -17,6 +17,7 @@ class AppViewModel extends ChangeNotifier {
 
   List<CartItem> get cart => _cart;
   List<Dish> get menu => _menu;
+  List<String> get categories => _menu.map((dish) => dish.category).toSet().toList();
   int get totalItems => _cart.fold(0, (sum, item) => sum + item.count);
   // max 2 decimal places for total price
   String get totalPrice => totalPriceBrut.toStringAsFixed(2);
