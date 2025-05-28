@@ -5,8 +5,8 @@ import 'package:app_train/services/dish_service.dart';
 import 'package:flutter/material.dart';
 
 class AppViewModel extends ChangeNotifier {
-  DishService _dishService;
-  CartService _cartService;
+  final DishService _dishService;
+  final CartService _cartService;
   List<CartItem> _cart = [];
   List<Dish> _menu = [];
 
