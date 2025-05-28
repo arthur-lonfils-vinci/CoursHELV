@@ -1,12 +1,11 @@
-import 'package:app_train/services/cart_service.dart';
-import 'package:app_train/services/dish_service.dart';
-import 'package:app_train/views/screens/add_dish_screen.dart';
-import 'package:app_train/views/screens/cart_screen.dart';
+import 'package:exam/services/itinerary_service.dart';
+import 'package:exam/services/mural_service.dart';
+import 'package:exam/view_models/app_view_model.dart';
+import 'package:exam/views/screens/home_screen.dart';
+import 'package:exam/views/screens/itinerary_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'views/screens/home_screen.dart';
-import 'package:app_train/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 
 final _router = GoRouter(
@@ -19,15 +18,9 @@ final _router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/cart',
+      path: '/itinary',
       builder: (context, state) {
-        return const CartScreen();
-      },
-    ),
-    GoRoute(
-      path: '/add-dish',
-      builder: (context, state) {
-        return const AddDishScreen();
+        return const ItineraryScreen();
       },
     ),
   ],
@@ -36,16 +29,18 @@ final _router = GoRouter(
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-  // final dishService = DishService();
-  // final cartService = CartService();
-  runApp(MyApp());
+  final itineraryService = ItineraryService();
+  final muralService = MuralService();
+  runApp(MyApp(itineraryService: itineraryService, muralService: muralService));
 }
 
 class MyApp extends StatelessWidget {
+  final ItineraryService itineraryService;
+  final MuralService muralService;
 
-  const MyApp({
-    super.key,
-
+  const MyApp({super.key,
+    required this.itineraryService,
+    required this.muralService,
   });
 
   @override
@@ -53,11 +48,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppViewModel>(
-          create: (context) => AppViewModel(),
+          create: (context) => AppViewModel(itineraryService, muralService),
         ),
       ],
       child: MaterialApp.router(
-        title: 'Restaurant App',
+        title: 'Fresques',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
