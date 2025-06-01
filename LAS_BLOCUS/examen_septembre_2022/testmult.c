@@ -9,8 +9,19 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
+
 #include "testmult.h"
 #include "utils_v1.h"
+
+
+
+int timer = 0; // Timer for the questionnaire
+int questionCount = 0; // Counter for the number of questions answered
+int correctCount = 0; // Counter for the number of correct answers
+int errorCount = 0; // Counter for the number of incorrect answers
+bool timerOn = false; // Bool to know if the alarm was launched
+int pipe_parent_to_child[2]; // Pipe for communication from parent to child
+int pipe_child_to_parent[2]; // Pipe for communication from child to parent
 
 /* Return a random number between 1 and 9 */
 int alea()
@@ -19,124 +30,109 @@ int alea()
     return c;
 }
 
-// TODO
 
-// Global Variable
-int father_to_child[2] = {-1, -1};
-int child_to_father[2] = {-1, -1};
-int nbQPasse = 0;
-int nbQuestion = 0;
+void child_handler(){
+	sclose(pipe_child_to_parent[0]);
+	sclose(pipe_parent_to_child[1]);
 
-void childHandler(void* timer)
-{
-    int t = *(int *) timer;
+	int result;
+	struct mult m;
 
-    sclose(father_to_child[1]);
-    sclose(child_to_father[0]);
+	sread(pipe_parent_to_child[0], &m, sizeof(m));
+	printf("\nQuestion n°%d) %d * %d = ", questionCount + 1, m.a, m.b);
+	fflush(NULL);
 
-    struct mult calcul;
-    sread(father_to_child[0], &calcul, sizeof(mult));
+	if (scanf("%d", &result) != 1) {
+		result = -1; // Indicate error with invalid result
+	}	
 
-    alarm(t);
-    printf("%d) %d * %d = ?\n", nbQuestion, calcul.a, calcul.b);
+	swrite(pipe_child_to_parent[1], &result, sizeof(result));
 
-    int result;
-    fflush(NULL);
-    scanf("%d", &result);
-    // dup2(child_to_father[1], STDIN_FILENO);
-    alarm(0);
-
-    swrite(child_to_father[1], &result, sizeof(int));
-    // sclose(STDIN_FILENO);
-    exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
-void handleSignals()
-{
-    printf("---- Temps dépassé pour la question %d ----\n\n", nbQuestion);
+void handle_sig_alarm() {
+	fflush(NULL);
+  printf("\n\n---- Temps dépassé pour le questionnaire ----\n\n");
+	timerOn = true;
 }
 
-void setup_signals()
-{
-    ssigaction(SIGALRM, handleSignals);
-}
 
 int main(int argc, char **argv)
 {
-    // TODO
-    setup_signals();
 
-    int error = 0;
-    int success = 0;
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s <timer_for_questionnaire>\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
 
-    int timer;
+	timer = atoi(argv[1]);
 
-    if (argc > 1)
-    {
-        timer = atoi(argv[1]);
-    }
+	if (timer <= 0) {
+		fprintf(stderr, "Timer must be a positive integer.\n");
+		exit(EXIT_FAILURE);
+	} else {
+		printf("Le timer pour ce questionnaire est de %d secondes\n", timer);
+	}
 
-    printf("\n\n---- Bienvenue dans cet exercice de multiplication ----\n");
-    printf("--> Vous devez répondre à %d questions \n\n", NB_QUEST);
+  ssigaction(SIGALRM, handle_sig_alarm);
 
+	srand(time(NULL)); // Initialize random seed
 
-    while (nbQuestion < NB_QUEST)
-    {
-        nbQuestion++;
+	printf("\n\n---- Bienvenue dans cet exercice de multiplication ----\n");
+  printf("--> Vous devez répondre à %d questions \n\n", NB_QUEST);
 
-        spipe(father_to_child);
-        spipe(child_to_father);
+	alarm(timer);
 
-        fork_and_run1(childHandler, &timer);
+	while (questionCount < NB_QUEST) {
+		spipe(pipe_parent_to_child);
+		spipe(pipe_child_to_parent);
 
-        sclose(father_to_child[0]);
-        sclose(child_to_father[1]);
+		fork_and_run0(child_handler);
 
-        struct mult calcul;
+		sclose(pipe_parent_to_child[0]);
+		sclose(pipe_child_to_parent[1]);
 
-        calcul.a = alea();
-        calcul.b = alea();
+		struct mult m;
+		m.a = alea();
+		m.b = alea();
 
-        swrite(father_to_child[1], &calcul, sizeof(mult));
+		questionCount++;
+		swrite(pipe_parent_to_child[1], &m, sizeof(m));
 
-        int result = calcul.a * calcul.b;
+		int result;
+		read(pipe_child_to_parent[0], &result, sizeof(int));
 
-        int resultFromChild;
+		if (timerOn || result == EOF) {
+			sclose(pipe_parent_to_child[1]);
+			sclose(pipe_child_to_parent[0]);
+			break;
+		}
 
-        sread(child_to_father[0], &resultFromChild, sizeof(int));
+		if(result == m.a * m.b) {
+			correctCount++;
+		} else {
+			errorCount++;
+		}
 
-        if (resultFromChild < 0) {
-            printf("Fin Forcée du programme\n");
-            break;
-        }
+		sclose(pipe_parent_to_child[1]);
+		sclose(pipe_child_to_parent[0]);
+	}
+	alarm(0);
 
-        if (result == resultFromChild)
-        {
-            success++;
-        } else {
-            error++;
-        }
+	fflush(NULL);
+  printf("\n---- Résultats ----\n");
+  printf("Vous avez réussi %d sur %d\n", correctCount, NB_QUEST);
 
-        sclose(father_to_child[1]);
-        sclose(child_to_father[0]);
-    }
-
-    printf("\n---- Résultats ----\n");
-    printf("Vous avez réussi %d sur %d\n", success, NB_QUEST);
-    printf("Vous avez passé %d question(s)\n\n", nbQPasse);
-
-    if (error == NB_QUEST)
-    {
-        printf("Échec total: un poste vient de se libérer pour le cours de DevOps\n\n\n");
-    }
-    else if (error == 0)
-    {
-        printf("Réussite total: un poste viens de se libérer pour le cours de LAS\n\n\n");
-    }
-    else
-    {
-        printf("Peut faire mieux: un poste vient de se libérer pour le cours de BD avancé\n\n\n");
-    }
-
-    exit(EXIT_SUCCESS);
+	if (errorCount == NB_QUEST) {
+    printf("Échec total: un poste vient de se libérer pour le cours de DevOps\n\n\n");
+	}
+	else if (correctCount == NB_QUEST) {
+    printf("Réussite total: un poste viens de se libérer pour le cours de LAS\n\n\n");
+	}
+	else if (timerOn) {
+    printf("Peut faire mieux: un poste vient de se libérer pour le cours de BD avancé\n\n\n");
+	}
+		
+	return 0;
 }

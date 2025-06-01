@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
     // Signal server that client has read the string
     sem_up0(sem_server_id);
 
-		// Permit the client to write again
-		sem_up0(sem_client_id);
+	// Permit the client to write again
+	sem_up0(sem_client_id);
     
     // Detach from shared memory
     sshmdt(content_data);

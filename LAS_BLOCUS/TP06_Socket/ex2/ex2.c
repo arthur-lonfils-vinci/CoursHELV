@@ -73,11 +73,23 @@ void extractPageName(const char *url, char *pageName) {
  * Find the start of HTML content (after HTTP headers)
  * PRE: buffer: HTTP response including headers
  * POST: returns pointer to the start of HTML content after headers
+ *
+ * HTTP Response Structure:
+ * -----------------------
+ * HTTP/1.1 200 OK           <-- Headers start
+ * Date: Mon, 27 Jul 2009...
+ * Content-Type: text/html
+ * ...
+ * [empty line: \r\n\r\n]    <-- Headers end
+ * <!DOCTYPE html>           <-- HTML content starts
+ * <html>
+ * ...
  */
 char* findHtmlStart(char *buffer) {
+  // Look for the empty line (\r\n\r\n) that separates headers from content
   char *headersEnd = strstr(buffer, "\r\n\r\n");
   if (headersEnd) {
-    return headersEnd + 4;  // Skip the "\r\n\r\n"
+    return headersEnd + 4;  // Skip the "\r\n\r\n" (4 bytes)
   }
   return buffer;  // If no headers found, return the original buffer
 }

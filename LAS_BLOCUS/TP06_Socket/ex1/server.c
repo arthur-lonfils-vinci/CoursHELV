@@ -69,19 +69,17 @@ int main(int argc, char **argv)
   while (!end)
   {
     /* client trt */
-    int newsockfd = accept(sockfd, NULL, NULL);
+    int newsockfd = saccept(sockfd);
     if (end)
     {
       terminate(tabPlayers, nbPlayers);
     }
-    checkNeg(newsockfd, "ERROR accept");
 
-    ssize_t ret = read(newsockfd, &msg, sizeof(msg));
+    sread(newsockfd, &msg, sizeof(msg));
     if (end)
     {
       terminate(tabPlayers, nbPlayers);
     }
-    checkCond(ret != sizeof(msg), "ERROR READ");
 
     printf("Inscription demandée par le joueur : %s\n", msg.messageText);
     if (nbPlayers < MAX_PLAYERS && strlen(msg.messageText) > 0)
