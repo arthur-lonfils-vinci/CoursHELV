@@ -20,7 +20,7 @@ gcc -std=c11 -pedantic -Wall -Wvla -Werror -Wno-unused-variable -D_DEFAULT_SOURC
 
 ---
 
-## 1. Communication bidirectionnelle (10/20 points)
+## 1. Communication bidirectionnelle (10/30 points)
 
 Écrivez un programme `messenger` qui ne reçoit aucun argument sur la ligne de commande et qui crée deux processus (père et fils) qui communiquent via deux pipes pour simuler un système de messagerie simple.
 
@@ -57,7 +57,7 @@ How are you today
 
 ---
 
-## 2. Compteur partagé avec synchronisation (10/20 points)
+## 2. Compteur partagé avec synchronisation (10/30 points)
 
 Cette question concerne l'implémentation d'un compteur partagé entre plusieurs processus fils utilisant la mémoire partagée et un sémaphore.
 
@@ -113,21 +113,117 @@ Expected: 6 - CORRECT
 
 ---
 
-## 3. Fichiers fournis
+## 3. Serveur d'enregistrement de clients (10/30 points)
+
+Écrivez un programme `registration_server` qui implémente un serveur d'enregistrement simple permettant à plusieurs clients de se connecter, d'envoyer leur nom, et de stocker ces informations en mémoire partagée.
+
+**Fonctionnement :**
+
+1. Le serveur prend un argument : le port d'écoute.
+
+2. Le serveur initialise :
+   - Un socket d'écoute sur le port spécifié
+   - Une zone de mémoire partagée pour stocker les informations des clients
+   - Un sémaphore pour protéger l'accès à la mémoire partagée
+
+3. Le serveur accepte les connexions entrantes en boucle et pour chaque client :
+   - Crée un processus fils pour gérer le client
+   - Le processus fils lit le nom du client (maximum 50 caractères)
+   - Ajoute le nom et le socket du client dans la mémoire partagée (protégé par sémaphore)
+   - Affiche "Client [nom] enregistré avec socket [fd]"
+   - Ferme la connexion et termine le processus fils
+
+4. Le serveur peut gérer jusqu'à 10 clients simultanément.
+
+5. Quand le serveur reçoit un signal SIGINT (Ctrl+C) :
+   - Il affiche la liste de tous les clients enregistrés
+   - Nettoie les ressources (mémoire partagée et sémaphore)
+   - Se termine proprement
+
+**Utilisation :**
+```bash
+./registration_server 8080
+```
+
+**Exemple d'exécution côté serveur :**
+```bash
+$ ./registration_server 8080
+Serveur d'enregistrement démarré sur le port 8080
+Client Alice enregistré avec socket 4
+Client Bob enregistré avec socket 5
+Client Charlie enregistré avec socket 6
+^C
+=== Liste des clients enregistrés ===
+Nombre de clients : 3
+Client 1 : Alice (socket 4)
+Client 2 : Bob (socket 5) 
+Client 3 : Charlie (socket 6)
+Nettoyage des ressources...
+Serveur arrêté
+```
+
+**Test avec telnet :**
+Vous pouvez tester votre serveur avec plusieurs terminaux en utilisant telnet :
+```bash
+telnet localhost 8080
+```
+Puis tapez un nom et appuyez sur Entrée.
+
+**Test avec le client fourni :**
+Un programme client `registration_client` est également fourni pour tester votre serveur :
+```bash
+./registration_client 127.0.0.1 8080 Alice
+./registration_client 127.0.0.1 8080 Bob
+./registration_client 127.0.0.1 8080 Charlie
+```
+
+**Indications utiles :**
+1. Utilisez `ssocket()`, `sbind()`, `slisten()`, `saccept()` de la librairie utils_v2.
+2. Utilisez `sshmget()`, `sshmat()`, `sshmdt()`, `sshmdelete()` pour la mémoire partagée.
+3. Utilisez `sem_create()`, `sem_down0()`, `sem_up0()`, `sem_delete()` pour les sémaphores.
+4. Utilisez `fork_and_run1()` pour créer les processus fils.
+5. Gérez le signal SIGINT avec `ssigaction()`.
+6. Les noms des clients ne dépasseront jamais 50 caractères.
+
+**Structure suggérée pour la mémoire partagée :**
+```c
+#define MAX_CLIENTS 10
+#define MAX_NAME_LEN 50
+
+struct client_info {
+    char name[MAX_NAME_LEN];
+    int sockfd;
+};
+
+struct shared_data {
+    struct client_info clients[MAX_CLIENTS];
+    int nb_clients;
+};
+```
+
+**Pour cette question, il vous est demandé de :**
+1. Compléter le programme `registration_server.c`
+2. Compléter le fichier `Makefile`
+
+---
+
+## 4. Fichiers fournis
 
 Sur EvalMoodle, vous trouverez les fichiers suivants :
 1. `messenger.c` (Q1)
 2. `shared_counter.c` (Q2)  
-3. `Makefile` (Q1 & Q2)
-4. `utils_v2.h` (Q1 & Q2)
-5. `utils_v2.c` (Q1 & Q2)
-6. Ce fichier d'instructions
+3. `registration_server.c` (Q3)
+4. `registration_client.c` (client de test pour Q3)
+5. `Makefile` (Q1, Q2 & Q3)
+6. `utils_v2.h` (Q1, Q2 & Q3)
+7. `utils_v2.c` (Q1, Q2 & Q3)
+8. Ce fichier d'instructions
 
 ---
 
-## 4. À remettre
+## 5. À remettre
 
-Sur EvalMoodle, les fichiers `messenger.c`, `shared_counter.c` et `Makefile` complétés.
+Sur EvalMoodle, les fichiers `messenger.c`, `shared_counter.c`, `registration_server.c` et `Makefile` complétés.
 
 ---
 

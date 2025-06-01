@@ -1,30 +1,35 @@
-CFLAGS = gcc -std=c17 -pedantic -Wall -Wvla -Werror -Wno-unused-variable -D_DEFAULT_SOURCE
+CC = gcc
 
-all: server client testmult
+CFLAGS = -O2 -std=c17 -pedantic -Wall -Wvla -Werror -Wno-unused-variable -D_DEFAULT_SOURCE
 
-server: server.o utils_v1.o
-	$(CFLAGS) -o server server.o utils_v1.o
+ALL = server client testmult
+UTILS = utils_v1
+INSTALL_DIR = /usr/local/bin/ # optional
 
-server.o: server.c utils_v1.h server.h
-	$(CFLAGS) -c server.c
+all: $(ALL)
 
-client: client.o utils_v1.o
-	$(CFLAGS) -o client client.o utils_v1.o
+# Pattern rule: each executable depends on its .o file + utils
+%: %.o $(UTILS).o 
+	$(CC) $(CFLAGS) -o $@ $^
 
-client.o : client.c utils_v1.h
-	$(CFLAGS) -c client.c
 
-testmult: testmult.o utils_v1.o
-	$(CFLAGS) -o testmult testmult.o utils_v1.o
+# Object file dependencies with headers
+server.o: server.c $(UTILS).h server.h 
+client.o: client.c $(UTILS).h
+testmult.o: testmult.c $(UTILS).h testmult.h 
+$(UTILS).o: $(UTILS).c $(UTILS).h
 
-testmult.o: testmult.c utils_v1.h testmult.h
-	$(CFLAGS) -c testmult.c
+# Generic compilation rule
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-utils_v1.o: utils_v1.c utils_v1.h
-	$(CFLAGS) -c utils_v1.c
+clean:
+	rm -f $(ALL) *.o 
 
-clean: 
-	rm -f *.o
-	rm -f server client testmult			
+uninstall: # optional
+	rm -f $(addprefix $(INSTALL_DIR), $(ALL))
 
-	
+install: $(ALL) # optional
+	cp $(ALL) $(INSTALL_DIR)
+
+.PHONY: all clean uninstall install

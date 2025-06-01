@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-std=c11 -pedantic -Wall -Wvla -Werror -Wno-unused-variable -D_DEFAULT_SOURCE
+CFLAGS=-std=c17 -pedantic -Wall -Wvla -Werror -Wno-unused-variable -D_DEFAULT_SOURCE
 
-ALL=messenger shared_counter
+ALL=messenger shared_counter registration_server registration_client
 
 
 all: $(ALL)

@@ -1,0 +1,77 @@
+@startuml process
+title Client-Server Synchronization with Two Semaphores
+skinparam backgroundColor #F8F8FF
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant "Admin" as Admin #LightBlue
+participant "Client" as Client #LightGreen
+participant "Server" as Server #LightCoral
+participant "Shared Memory" as SHM #LightYellow
+participant "Client Semaphore\n(sem_client)" as SemClient #Orange
+participant "Server Semaphore\n(sem_server)" as SemServer #Purple
+
+note over Admin, SemServer : **Initial Setup Phase**
+Admin -> SHM : Create shared memory segment
+Admin -> SemClient : Create semaphore (initial value = 1)
+note right : Allows client to write first
+Admin -> SemServer : Create semaphore (initial value = 0)
+note right : Server must wait for client
+Admin -> SHM : Initialize content buffer to zeros
+
+note over Client, SemServer : **Runtime Phase - Processing Loop**
+
+Server -> SemServer : sem_down0() - Wait for client data
+note right : Blocks because initial value is 0
+
+Client -> SemClient : sem_down0() - Acquire write permission
+note right : Succeeds because initial value is 1\nNow sem_client = 0
+Client -> SHM : Write 10-character string
+Client -> SemServer : sem_up0() - Signal server
+note right : Increments sem_server to 1\nUnblocks server
+
+Server -> SHM : Read string from shared memory
+Server -> SHM : Convert string to uppercase
+Server -> SemClient : sem_up0() - Signal client processing done
+note right : Increments sem_client to 1\nAllows client to read result
+
+Client -> SemClient : sem_down0() - Wait for server processing
+note right : Blocks until server signals completion
+Client -> SHM : Read uppercase result
+Client -> SemServer : sem_up0() - Signal server client has read
+note right : Tells server client finished reading
+Client -> SemClient : sem_up0() - Release for next client
+note right : Allows next client to write
+
+Server -> SemServer : sem_down0() - Wait for next client acknowledgment
+note right : Blocks until client signals it's done
+
+note over Client, Server : **Synchronization Summary**
+
+note over SemClient #FFFFE0
+**Client Semaphore (sem_client)**
+- Controls access to shared memory for writing
+- Initial value: 1 (client can write immediately)
+- Used for: Write permission & read completion signaling
+- Value 1: Client can write or server finished processing
+- Value 0: Client must wait for server to finish
+end note
+
+note over SemServer #FFE0FF
+**Server Semaphore (sem_server)**
+- Controls server processing and client acknowledgment
+- Initial value: 0 (server waits for data)
+- Used for: Data availability & read acknowledgment
+- Value 1: Data available for processing or client finished reading
+- Value 0: Server waits for data or client acknowledgment
+end note
+
+note over SHM #FFFACD
+**Shared Memory**
+- Stores 11-byte buffer (10 chars + null terminator)
+- Written by client (lowercase string)
+- Modified by server (converted to uppercase)
+- Read by client (uppercase result)
+end note
+
+@enduml
