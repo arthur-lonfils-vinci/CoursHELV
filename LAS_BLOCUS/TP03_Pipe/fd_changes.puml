@@ -1,0 +1,55 @@
+@startuml fd_changes
+!theme plain
+title File Descriptor Changes with dup2()
+
+package "Initial State" {
+  rectangle "Process" as P1 {
+    rectangle "fd 0: stdin → terminal" as fd0_1
+    rectangle "fd 1: stdout → terminal" as fd1_1  
+    rectangle "fd 2: stderr → terminal" as fd2_1
+    rectangle "fd 3: pipe_fd[0] → pipe read" as fd3_1
+    rectangle "fd 4: pipe_fd[1] → pipe write" as fd4_1
+  }
+}
+
+package "After dup2(pipe_fd[1], STDOUT_FILENO)" {
+  rectangle "Child Process 1" as P2 {
+    rectangle "fd 0: stdin → terminal" as fd0_2
+    rectangle "fd 1: stdout → pipe write" as fd1_2 #lightgreen
+    rectangle "fd 2: stderr → terminal" as fd2_2
+    rectangle "fd 4: pipe_fd[1] → pipe write" as fd4_2 #lightblue
+  }
+  note right of fd1_2 : Now points to pipe!
+  note right of fd4_2 : Same destination as fd 1
+}
+
+package "After dup2(pipe_fd[0], STDIN_FILENO)" {
+  rectangle "Child Process 2" as P3 {
+    rectangle "fd 0: stdin → pipe read" as fd0_3 #lightgreen
+    rectangle "fd 1: stdout → terminal" as fd1_3
+    rectangle "fd 2: stderr → terminal" as fd2_3
+    rectangle "fd 3: pipe_fd[0] → pipe read" as fd3_3 #lightblue
+  }
+  note right of fd0_3 : Now points to pipe!
+  note right of fd3_3 : Same source as fd 0
+}
+
+rectangle "Pipe" as Pipe {
+  rectangle "Read End" as PipeRead
+  rectangle "Write End" as PipeWrite
+}
+
+fd1_2 --> PipeWrite : printf() output
+fd4_2 --> PipeWrite : same destination
+PipeRead --> fd0_3 : scanf() input
+PipeRead --> fd3_3 : same source
+
+note bottom
+**Key Points:**
+1. dup2() makes two file descriptors point to the same resource
+2. Standard I/O gets redirected to the pipe
+3. Programs don't know they're using a pipe - they just use stdin/stdout normally
+4. This is how shell pipes (cmd1 | cmd2) work internally!
+end note
+
+@enduml

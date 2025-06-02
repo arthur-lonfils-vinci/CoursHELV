@@ -23,6 +23,8 @@ $(UTILS).o: $(UTILS).c $(UTILS).h
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+
+
 clean:
 	rm -f $(ALL) *.o 
 

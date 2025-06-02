@@ -1,0 +1,106 @@
+@startuml dup2_explanation
+!theme plain
+title Understanding dup2() in Pipe Communication
+
+participant "Parent Process" as Parent
+participant "Child 1 (cmd1)" as Child1
+participant "Child 2 (cmd2)" as Child2
+participant "Pipe" as Pipe
+participant "Terminal/stdout" as Terminal
+participant "stdin" as Stdin
+
+note over Parent, Stdin
+**Initial State: File Descriptors**
+- STDIN_FILENO = 0 (points to terminal input)
+- STDOUT_FILENO = 1 (points to terminal output)
+- STDERR_FILENO = 2 (points to terminal error)
+end note
+
+Parent -> Pipe: pipe(pipe_fd) creates pipe
+note right: pipe_fd[0] = read end\npipe_fd[1] = write end
+
+Parent -> Child1: fork() creates child1
+activate Child1
+
+note over Child1
+**Child1 File Descriptors BEFORE dup2():**
+- fd 0: stdin (terminal)
+- fd 1: stdout (terminal) 
+- fd 2: stderr (terminal)
+- fd 3: pipe_fd[0] (read end)
+- fd 4: pipe_fd[1] (write end)
+end note
+
+Child1 -> Child1: close(pipe_fd[0])
+note right: Close unused read end
+
+Child1 -> Child1: dup2(pipe_fd[1], STDOUT_FILENO)
+note over Child1
+**WHAT dup2() DOES:**
+1. Makes fd 1 (STDOUT_FILENO) point to the same place as pipe_fd[1]
+2. Closes the original stdout connection to terminal
+3. Now fd 1 points to the pipe's write end
+end note
+
+note over Child1
+**Child1 File Descriptors AFTER dup2():**
+- fd 0: stdin (terminal)
+- fd 1: stdout (NOW POINTS TO PIPE!) 
+- fd 2: stderr (terminal)
+- fd 4: pipe_fd[1] (write end - same as fd 1 now)
+end note
+
+Child1 -> Child1: close(pipe_fd[1])
+note right: Close original pipe fd\n(fd 1 still works!)
+
+Child1 -> Child1: execlp(cmd1, cmd1, NULL)
+Child1 -> Pipe: printf/cout output goes to pipe
+note right: Because stdout (fd 1)\nnow points to pipe!
+
+Parent -> Child2: fork() creates child2
+activate Child2
+
+note over Child2
+**Child2 File Descriptors BEFORE dup2():**
+- fd 0: stdin (terminal)
+- fd 1: stdout (terminal)
+- fd 2: stderr (terminal)
+- fd 3: pipe_fd[0] (read end)
+- fd 4: pipe_fd[1] (write end)
+end note
+
+Child2 -> Child2: close(pipe_fd[1])
+note right: Close unused write end
+
+Child2 -> Child2: dup2(pipe_fd[0], STDIN_FILENO)
+note over Child2
+**WHAT dup2() DOES:**
+1. Makes fd 0 (STDIN_FILENO) point to the same place as pipe_fd[0]
+2. Closes the original stdin connection to terminal
+3. Now fd 0 points to the pipe's read end
+end note
+
+note over Child2
+**Child2 File Descriptors AFTER dup2():**
+- fd 0: stdin (NOW POINTS TO PIPE!)
+- fd 1: stdout (terminal)
+- fd 2: stderr (terminal)
+- fd 3: pipe_fd[0] (read end - same as fd 0 now)
+end note
+
+Child2 -> Child2: close(pipe_fd[0])
+note right: Close original pipe fd\n(fd 0 still works!)
+
+Child2 -> Child2: execvp(cmd2, cmd2_args)
+Pipe -> Child2: scanf/cin reads from pipe
+note right: Because stdin (fd 0)\nnow points to pipe!
+
+Child2 -> Terminal: printf/cout output goes to terminal
+
+note over Parent, Stdin
+**RESULT: cmd1 | cmd2**
+Data flows: cmd1 stdout → pipe → cmd2 stdin
+cmd2 output still goes to terminal
+end note
+
+@enduml

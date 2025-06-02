@@ -1,0 +1,4 @@
+3. After dup2(): This goes to the FILE, not terminal!
+   - STDOUT_FILENO (1) now points to the same place as file_fd (3)
+   - Any printf() now writes to the file
+4. Even after close(file_fd), stdout still works because fd 1 points to file
