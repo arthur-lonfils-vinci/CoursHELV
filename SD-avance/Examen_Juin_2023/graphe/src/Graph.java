@@ -58,12 +58,12 @@ public class Graph {
 	// renvoie l'ensemble des tron�ons entrants de la station 
 	// c�d les tron�ons dont l'arrivee est la station en param�tre
 	public Set<Troncon> tronconsEntrants(Station s){
-		Set<Troncon> tronconsSortants;
-		Set<Troncon> troncons;
+		Set<Troncon> tronconsSortants = mapStationTroncons.get(s);
 		Set<Troncon> tronconsEntrants = new HashSet<>();
-		tronconsSortants = mapStationTroncons.get(s);
+
 		for (Troncon troncon : tronconsSortants){
-			troncons = mapStationTroncons.get(troncon.getArrivee());
+			Set<Troncon> troncons = mapStationTroncons.get(troncon.getArrivee());
+
 			for (Troncon troncon1 : troncons){
 				if (troncon1.getArrivee().equals(s)){
 					tronconsEntrants.add(troncon1);
@@ -94,10 +94,6 @@ public class Graph {
 			for (Troncon t :  mapStationTroncons.get(current)) {
 				if (!visites.contains(t.getArrivee())) {
 					result.put(t.getArrivee(), t.getDepart());
-					if (t.getArrivee().equals(stationArrivee)) {
-						file.clear();
-						break;
-					}
 					file.add(t.getArrivee());
 					visites.add(t.getArrivee());
 				}
@@ -109,6 +105,8 @@ public class Graph {
 		for (Station station = stationArrivee; station != null; station = result.get(station)) {
 			path.addFirst(station);
 		}
+
+		System.out.println(path);
 
 		for (int i = 0; i < path.size()-1; i++) {
 			for (Troncon troncon: mapStationTroncons.get(path.get(i))){
