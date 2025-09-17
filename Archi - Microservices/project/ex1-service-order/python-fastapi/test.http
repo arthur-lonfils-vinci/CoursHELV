@@ -1,0 +1,28 @@
+### Get all orders
+GET http://localhost:8000/
+
+### Create new order
+POST http://localhost:8000/order/
+Content-Type: application/json
+
+{
+    "customer_name": "John Doe",
+    "order_lines": [
+        {
+            "id": 1,
+            "product_name": "Laptop",
+            "quantity": 1,
+            "total_price": 999.99
+        },
+        {
+            "id": 2,
+            "product_name": "Mouse",
+            "quantity": 2,
+            "total_price": 49.98
+        }
+    ],
+    "total_amount": 1049.97
+}
+
+### Get order by ID
+GET http://localhost:8000/order/1
