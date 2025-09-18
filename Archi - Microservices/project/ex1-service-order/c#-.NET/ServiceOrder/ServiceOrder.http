@@ -1,0 +1,14 @@
+@ServiceOrder_HostAddress = https://localhost:7104
+
+POST {{ServiceOrder_HostAddress}}/api/orderitems
+Content-Type: application/json
+
+{
+  //OrderItem
+}
+
+###
+
+GET {{ServiceOrder_HostAddress}}/api/orderitems
+
+###
