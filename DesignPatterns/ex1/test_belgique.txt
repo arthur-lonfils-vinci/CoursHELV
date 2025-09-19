@@ -1,0 +1,7 @@
+Belgique est un pays en Europe.
+Le mot Belgique apparait ici deux fois: Belgique Belgique.
+Ceci est une ligne sans le mot clé.
+Radar est un palindrome connu, tout comme kayak et level.
+belgique peut aussi être écrit en minuscule.
+Encore une ligne avec Belgique au début.
+Un mot palindrome simple est 'deed'.
