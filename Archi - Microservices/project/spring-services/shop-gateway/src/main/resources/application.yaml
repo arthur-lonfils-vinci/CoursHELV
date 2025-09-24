@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: shop-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: client-service-route
+              uri: http://localhost:8081
+              predicates:
+                - Path=/clients/**
+            - id: product-service-route
+              uri: http://localhost:8082
+              predicates:
+                - Path=/products/**
+            - id: order-service-route
+              uri: http://localhost:8083
+              predicates:
+                - Path=/orders/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: '#{@ipAddressKeyResolver}' # Referencing the bean defined above
+                    redis-rate-limiter.replenishRate: 10 # How many requests per second can a user make without losing any tokens
+                    redis-rate-limiter.burstCapacity: 20  # How many requests a user can do in a single burst
+                    # Optional: specify requestedTokens for each request if you want different costs
+                    # redis-rate-limiter.requestedTokens: 1
+                    # IMPORTANT: Configure Redis connection details
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  # password: your_redis_password # Uncomment if your Redis requires a password
+  # database: 0 # Redis database to use
+server:
+  port: 8080 # Port par défaut pour l'API Gateway
