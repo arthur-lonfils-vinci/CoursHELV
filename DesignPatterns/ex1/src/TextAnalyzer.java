@@ -22,5 +22,6 @@ public class TextAnalyzer {
         for (Observer observer : observers) {
             observer.printResult();
         }
+        lecteurAvecBuffer.close();
     }
 }

@@ -25,8 +25,8 @@ model User {
 }
 
 enum UserRole {
-	USER
-	ADMIN
+  USER
+  ADMIN
 }
 
 model Project {
