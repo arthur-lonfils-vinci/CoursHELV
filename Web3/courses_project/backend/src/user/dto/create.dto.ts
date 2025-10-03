@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RegisterDto {
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'User email address for registration',
+    description: 'User email address for creation',
     example: 'newuser@example.com',
     type: String,
     format: 'email',
@@ -15,7 +15,7 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'User firstname for registration',
+    description: 'User firstname for creation',
     example: 'John',
     type: String,
   })
@@ -24,7 +24,7 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'User lastname for registration',
+    description: 'User lastname for creation',
     example: 'Doe',
     type: String,
   })
@@ -49,7 +49,7 @@ export class RegisterDto {
     pattern:
       '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
   })
-  password: string;
+  passwordHash: string;
 
   @IsString()
   avatarUrl?: string;

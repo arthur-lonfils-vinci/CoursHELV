@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { excludeUserHash, handleException } from '../common/helper';
 import { SafeUser } from '../common/types/';
-import { EditUserDto } from './dto';
+import { CreateUserDto, EditUserDto } from './dto';
 import { PRISMA_ERROR_CODES } from '../common/constant';
 
 @Injectable()
@@ -16,6 +16,18 @@ export class UserService {
 
     if (!user) {
       handleException(PRISMA_ERROR_CODES.RECORD_NOT_FOUND, 'User Not Found');
+    }
+
+    return excludeUserHash(user);
+  }
+
+  async findByEmail(email: string): Promise<SafeUser | null> {
+    const user = await this.prisma.user.findFirst({
+      where: { email },
+    });
+
+    if (!user) {
+      return null;
     }
 
     return excludeUserHash(user);
@@ -54,6 +66,13 @@ export class UserService {
       );
     }
 
+    return excludeUserHash(user);
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<SafeUser> {
+    const user = await this.prisma.user.create({
+      data: createUserDto,
+    });
     return excludeUserHash(user);
   }
 }

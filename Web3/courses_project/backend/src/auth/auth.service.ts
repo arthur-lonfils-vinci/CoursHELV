@@ -4,7 +4,7 @@ import { LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
-import { excludeUserHash, handleException } from '../common/helper';
+import { handleException } from '../common/helper';
 import { APP_ERROR_CODE } from '../common/constant';
 import { randomUUID } from 'crypto';
 import { SafeUser } from '../common/types';
@@ -12,6 +12,8 @@ import { SecurityService } from '../security/security.service';
 import * as cacheManager from 'cache-manager';
 import { Inject as InjectNest } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto';
 
 @Injectable()
 export class AuthService {
@@ -19,21 +21,23 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private security: SecurityService,
+    private userService: UserService,
     @InjectNest(CACHE_MANAGER) private cache: cacheManager.Cache,
   ) {}
 
   async register(dto: RegisterDto): Promise<SafeUser> {
     try {
       const hash = await argon.hash(dto.password);
-      const user = await this.prisma.user.create({
-        data: {
-          email: dto.email,
-          firstname: dto.firstname,
-          lastname: dto.lastname,
-          passwordHash: hash,
-        },
-      });
-      return excludeUserHash(user);
+      const userToCreate: CreateUserDto = {
+        lastName: dto.lastName,
+        firstName: dto.firstName,
+        email: dto.email,
+        passwordHash: hash,
+      };
+
+      const user = await this.userService.createUser(userToCreate);
+
+      return user;
     } catch (error) {
       handleException(error);
     }
@@ -65,6 +69,27 @@ export class AuthService {
       !!dto.rememberMe,
       ip,
     );
+  }
+
+  async loginGoogle(
+    user_id: string,
+    ip?: string,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: user_id },
+    });
+
+    if (!user) {
+      this.security.logFailedLogin(user_id, ip);
+      handleException(APP_ERROR_CODE.UNAUTHORIZED, 'Invalid credentials');
+    }
+
+    this.security.logSecurityEvent('SUCCESSFUL_LOGIN', user.id, ip, {
+      email: user.email,
+      rememberMe: true,
+    });
+    const refreshTtlSec = 60 * 60 * 24 * 30; // 30d
+    return this.generateTokens(user.id, user.email, refreshTtlSec, true, ip);
   }
 
   private async generateTokens(
@@ -158,6 +183,20 @@ export class AuthService {
     }
 
     this.security.logSecurityEvent('LOGOUT', undefined, ip);
+  }
+
+  async validateUserGoogle(googleUser: RegisterDto): Promise<SafeUser> {
+    const user = await this.userService.findByEmail(googleUser.email);
+
+    if (user) return user;
+    const userToCreate: CreateUserDto = {
+      firstName: googleUser.firstName,
+      lastName: googleUser.lastName,
+      email: googleUser.email,
+      avatarUrl: googleUser.avatarUrl,
+      passwordHash: googleUser.password,
+    };
+    return await this.userService.createUser(userToCreate);
   }
 
   // --- helpers ---

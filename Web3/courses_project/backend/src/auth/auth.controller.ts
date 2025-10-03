@@ -6,11 +6,15 @@ import {
   Ip,
   Post,
   Headers,
+  Get,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto } from './dto';
 import { SafeUser } from '../common/types';
+import { GoogleAuthGuard } from 'src/common/guard';
 
 @Controller('auth')
 export class AuthController {
@@ -64,5 +68,22 @@ export class AuthController {
   ): Promise<{ message: string }> {
     await this.authService.logout(dto, authorization, ip);
     return { message: 'Logged out successfully' };
+  }
+
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/login')
+  googleLogin() {}
+
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/callback')
+  async googleCallback(
+    @Req() req,
+    @Ip() ip,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    const response = await this.authService.loginGoogle(
+      req.user.id as string,
+      ip,
+    );
+    return response;
   }
 }
