@@ -70,9 +70,12 @@ export class AuthController {
     return { message: 'Logged out successfully' };
   }
 
+  /**
+   * GOOGLE AUTH
+   */
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
-  googleLogin() {}
+  googleLogin(): void {}
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')

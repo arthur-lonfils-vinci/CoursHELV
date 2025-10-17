@@ -25,6 +25,11 @@ export class AuthService {
     @InjectNest(CACHE_MANAGER) private cache: cacheManager.Cache,
   ) {}
 
+  /** AUTH SYSTEM
+   * register
+   * @param dto
+   * @returns SafeUser
+   */
   async register(dto: RegisterDto): Promise<SafeUser> {
     try {
       const hash = await argon.hash(dto.password);
@@ -43,6 +48,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * login
+   * @param dto
+   * @param ip
+   * @returns { access_token: string; refresh_token: string }
+   */
   async login(
     dto: LoginDto,
     ip?: string,
@@ -71,6 +82,44 @@ export class AuthService {
     );
   }
 
+  /**
+   * Logout: revoke refresh token + blacklist the current access token (if provided).
+   * `authorization` is the raw value of the Authorization header (e.g., "Bearer xxx").
+   * @param dto
+   * @param authorization
+   * @param ip
+   */
+  async logout(
+    dto: RefreshTokenDto,
+    authorization?: string,
+    ip?: string,
+  ): Promise<void> {
+    // 1) Kill the refresh token (if present)
+    if (dto.refresh_token) {
+      await this.cache.del(`refresh:${dto.refresh_token}`);
+    }
+
+    // 2) Blacklist current access token (optional but recommended)
+    const accessToken = this.extractBearer(authorization);
+    if (accessToken) {
+      const decoded = this.jwt.decode(accessToken);
+      if (decoded.jti && decoded.exp) {
+        const ttlMs = this.secondsUntil(decoded.exp) * 1000;
+        if (ttlMs > 0) {
+          await this.cache.set(`blacklist:${decoded.jti}`, true, ttlMs);
+        }
+      }
+    }
+
+    this.security.logSecurityEvent('LOGOUT', undefined, ip);
+  }
+
+  /** GOOGLE AUTH SYSTEM
+   * login
+   * @param user_id
+   * @param ip
+   * @returns { access_token: string; refresh_token: string }
+   */
   async loginGoogle(
     user_id: string,
     ip?: string,
@@ -92,6 +141,34 @@ export class AuthService {
     return this.generateTokens(user.id, user.email, refreshTtlSec, true, ip);
   }
 
+  /**
+   * validate
+   * @param googleUser
+   * @returns SafeUser
+   */
+  async validateUserGoogle(googleUser: RegisterDto): Promise<SafeUser> {
+    const user = await this.userService.findByEmail(googleUser.email);
+
+    if (user) return user;
+    const userToCreate: CreateUserDto = {
+      firstName: googleUser.firstName,
+      lastName: googleUser.lastName,
+      email: googleUser.email,
+      avatarUrl: googleUser.avatarUrl,
+      passwordHash: googleUser.password,
+    };
+    return await this.userService.createUser(userToCreate);
+  }
+
+  /** TOKENS SYSTEM
+   * generate
+   * @param userId
+   * @param email
+   * @param refreshTtlSec
+   * @param rememberMe
+   * @param ip
+   * @returns { access_token: string; refresh_token: string }
+   */
   private async generateTokens(
     userId: string,
     email: string,
@@ -119,6 +196,12 @@ export class AuthService {
     return { access_token: accessToken, refresh_token: refreshToken };
   }
 
+  /**
+   * refresh
+   * @param dto
+   * @param ip
+   * @returns { access_token: string; refresh_token: string }
+   */
   async refreshToken(
     dto: RefreshTokenDto,
     ip?: string,
@@ -156,57 +239,24 @@ export class AuthService {
     );
   }
 
+  /** HELPERS */
+
   /**
-   * Logout: revoke refresh token + blacklist the current access token (if provided).
-   * `authorization` is the raw value of the Authorization header (e.g., "Bearer xxx").
+   * extract bearer token
+   * @param authorization
+   * @returns string | undefined
    */
-  async logout(
-    dto: RefreshTokenDto,
-    authorization?: string,
-    ip?: string,
-  ): Promise<void> {
-    // 1) Kill the refresh token (if present)
-    if (dto.refresh_token) {
-      await this.cache.del(`refresh:${dto.refresh_token}`);
-    }
-
-    // 2) Blacklist current access token (optional but recommended)
-    const accessToken = this.extractBearer(authorization);
-    if (accessToken) {
-      const decoded = this.jwt.decode(accessToken);
-      if (decoded.jti && decoded.exp) {
-        const ttlMs = this.secondsUntil(decoded.exp) * 1000;
-        if (ttlMs > 0) {
-          await this.cache.set(`blacklist:${decoded.jti}`, true, ttlMs);
-        }
-      }
-    }
-
-    this.security.logSecurityEvent('LOGOUT', undefined, ip);
-  }
-
-  async validateUserGoogle(googleUser: RegisterDto): Promise<SafeUser> {
-    const user = await this.userService.findByEmail(googleUser.email);
-
-    if (user) return user;
-    const userToCreate: CreateUserDto = {
-      firstName: googleUser.firstName,
-      lastName: googleUser.lastName,
-      email: googleUser.email,
-      avatarUrl: googleUser.avatarUrl,
-      passwordHash: googleUser.password,
-    };
-    return await this.userService.createUser(userToCreate);
-  }
-
-  // --- helpers ---
-
   private extractBearer(authorization?: string): string | undefined {
     if (!authorization) return undefined;
     const [type, token] = authorization.split(' ');
     return type?.toLowerCase() === 'bearer' ? token : undefined;
   }
 
+  /**
+   * seconds untils a time
+   * @param expUnixSeconds
+   * @returns number
+   */
   private secondsUntil(expUnixSeconds: number): number {
     const now = Math.floor(Date.now() / 1000);
     return Math.max(0, expUnixSeconds - now);

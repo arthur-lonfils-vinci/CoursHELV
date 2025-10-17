@@ -35,7 +35,7 @@ export class RolesGuard implements CanActivate {
     if (roles?.system?.length) {
       this.checkRole(
         'System',
-        user.role as UserRole,
+        user.role,
         roles.system,
         APP_ERROR_CODE.FORBIDDEN,
       );
