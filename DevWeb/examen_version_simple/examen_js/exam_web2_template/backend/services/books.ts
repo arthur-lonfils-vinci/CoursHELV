@@ -2,7 +2,7 @@
 import path from "node:path";
 import { Book, NewBook } from "../types";
 import { parse, serialize } from "../utils/json";
-const jsonDbPath = path.join(__dirname, "/../data/pizzas.json");
+const jsonDbPath = path.join(__dirname, "/../data/books.json");
 
 const defaultBooks: Book[] = [
   {
@@ -32,7 +32,6 @@ const defaultBooks: Book[] = [
     creationDate: "2023-03-05",
   },
 ];
-
 
 function readAllBooks(order: string | undefined): Book[] {
   const orderByTitle = order && order.includes("title") ? order : undefined;

