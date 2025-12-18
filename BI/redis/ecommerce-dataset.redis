@@ -1,0 +1,112 @@
+# ===========================================
+# Dataset e-commerce pour TP Redis
+# À coller dans le Workbench de Redis Insight
+# ===========================================
+
+# ----- UTILISATEURS (Hashes) -----
+HSET user:1 username "alice" email "alice@example.com" country "France" age 28 signup_date "2024-01-15" premium "true"
+HSET user:2 username "bob" email "bob@example.com" country "France" age 34 signup_date "2024-02-20" premium "false"
+HSET user:3 username "charlie" email "charlie@example.com" country "Belgium" age 22 signup_date "2024-03-10" premium "true"
+HSET user:4 username "diana" email "diana@example.com" country "France" age 45 signup_date "2024-01-28" premium "false"
+HSET user:5 username "eve" email "eve@example.com" country "Switzerland" age 31 signup_date "2024-04-05" premium "true"
+HSET user:6 username "frank" email "frank@example.com" country "France" age 27 signup_date "2024-05-12" premium "false"
+HSET user:7 username "grace" email "grace@example.com" country "Belgium" age 39 signup_date "2024-02-14" premium "true"
+HSET user:8 username "henry" email "henry@example.com" country "France" age 52 signup_date "2024-06-01" premium "false"
+HSET user:9 username "iris" email "iris@example.com" country "Switzerland" age 24 signup_date "2024-03-22" premium "false"
+HSET user:10 username "jack" email "jack@example.com" country "France" age 33 signup_date "2024-07-08" premium "true"
+
+# ----- PRODUITS (Hashes) -----
+HSET product:101 name "Laptop Pro 15" category "electronics" price 1299 stock 45 brand "TechCorp" rating 4.5
+HSET product:102 name "Wireless Mouse" category "electronics" price 49 stock 230 brand "TechCorp" rating 4.2
+HSET product:103 name "USB-C Hub" category "electronics" price 79 stock 120 brand "ConnectPlus" rating 4.7
+HSET product:104 name "Mechanical Keyboard" category "electronics" price 159 stock 85 brand "KeyMaster" rating 4.8
+HSET product:105 name "Running Shoes" category "sports" price 129 stock 67 brand "SportMax" rating 4.3
+HSET product:106 name "Yoga Mat" category "sports" price 35 stock 200 brand "FitLife" rating 4.6
+HSET product:107 name "Protein Powder" category "nutrition" price 45 stock 150 brand "MuscleUp" rating 4.1
+HSET product:108 name "Coffee Maker" category "home" price 89 stock 92 brand "BrewMaster" rating 4.4
+HSET product:109 name "Desk Lamp" category "home" price 55 stock 175 brand "LightCo" rating 4.0
+HSET product:110 name "Backpack" category "accessories" price 75 stock 110 brand "TravelGear" rating 4.5
+
+# ----- CATEGORIES (Sets) -----
+SADD category:electronics "product:101" "product:102" "product:103" "product:104"
+SADD category:sports "product:105" "product:106"
+SADD category:nutrition "product:107"
+SADD category:home "product:108" "product:109"
+SADD category:accessories "product:110"
+
+# ----- TAGS PRODUITS (Sets) -----
+SADD product:101:tags "laptop" "portable" "high-performance" "work" "premium"
+SADD product:102:tags "mouse" "wireless" "ergonomic" "office"
+SADD product:103:tags "usb" "hub" "connectivity" "portable"
+SADD product:104:tags "keyboard" "mechanical" "gaming" "rgb" "premium"
+SADD product:105:tags "shoes" "running" "outdoor" "fitness"
+SADD product:106:tags "yoga" "fitness" "home-workout" "eco-friendly"
+SADD product:107:tags "protein" "fitness" "nutrition" "muscle"
+SADD product:108:tags "coffee" "kitchen" "appliance" "morning"
+SADD product:109:tags "lamp" "desk" "office" "led"
+SADD product:110:tags "backpack" "travel" "laptop" "waterproof"
+
+# ----- PANIERS UTILISATEURS (Hashes - product:quantity) -----
+HSET cart:user:1 "product:101" 1 "product:103" 2
+HSET cart:user:2 "product:105" 1 "product:106" 1 "product:107" 2
+HSET cart:user:3 "product:104" 1
+HSET cart:user:5 "product:108" 1 "product:109" 2 "product:102" 1
+
+# ----- COMMANDES RÉCENTES (Lists) -----
+LPUSH orders:recent "order:1001" "order:1002" "order:1003" "order:1004" "order:1005" "order:1006" "order:1007" "order:1008"
+
+HSET order:1001 user_id 1 total 1457 status "delivered" date "2024-11-01"
+HSET order:1002 user_id 3 total 159 status "delivered" date "2024-11-02"
+HSET order:1003 user_id 2 total 209 status "shipped" date "2024-11-05"
+HSET order:1004 user_id 5 total 253 status "shipped" date "2024-11-08"
+HSET order:1005 user_id 1 total 79 status "processing" date "2024-11-10"
+HSET order:1006 user_id:7 total 89 status "processing" date "2024-11-11"
+HSET order:1007 user_id 4 total 1299 status "pending" date "2024-11-12"
+HSET order:1008 user_id 10 total 324 status "pending" date "2024-11-12"
+
+# ----- PRODUITS VUES (Sorted Set - score = nombre de vues) -----
+ZADD product:views 1523 "product:101" 892 "product:104" 756 "product:105" 698 "product:102" 612 "product:108" 589 "product:103" 445 "product:106" 398 "product:110" 287 "product:109" 156 "product:107"
+
+# ----- VENTES PRODUITS (Sorted Set - score = unités vendues) -----
+ZADD product:sales 234 "product:102" 189 "product:105" 156 "product:101" 142 "product:106" 98 "product:104" 87 "product:108" 76 "product:103" 65 "product:107" 54 "product:109" 43 "product:110"
+
+# ----- REVENUS PAR PRODUIT (Sorted Set - score = revenu total €) -----
+ZADD product:revenue 202644 "product:101" 24381 "product:105" 15582 "product:104" 11466 "product:102" 7743 "product:108" 6004 "product:103" 4970 "product:106" 4125 "product:110" 2970 "product:109" 2925 "product:107"
+
+# ----- UTILISATEURS PAR PAYS (Sets) -----
+SADD users:country:France "user:1" "user:2" "user:4" "user:6" "user:8" "user:10"
+SADD users:country:Belgium "user:3" "user:7"
+SADD users:country:Switzerland "user:5" "user:9"
+
+# ----- UTILISATEURS PREMIUM (Set) -----
+SADD users:premium "user:1" "user:3" "user:5" "user:7" "user:10"
+
+# ----- WISHLIST UTILISATEURS (Sets) -----
+SADD wishlist:user:1 "product:104" "product:110"
+SADD wishlist:user:2 "product:101" "product:103" "product:108"
+SADD wishlist:user:3 "product:105" "product:106"
+SADD wishlist:user:6 "product:101" "product:104" "product:102"
+SADD wishlist:user:9 "product:108" "product:109"
+
+# ----- SESSIONS ACTIVES (Strings avec TTL simulé) -----
+SET session:user:1 "token_a1b2c3d4" 
+SET session:user:3 "token_e5f6g7h8"
+SET session:user:5 "token_i9j0k1l2"
+SET session:user:10 "token_m3n4o5p6"
+
+# ----- STATISTIQUES GLOBALES -----
+SET stats:total_users 10
+SET stats:total_products 10
+SET stats:total_orders 8
+SET stats:revenue_total 498432
+
+# ----- ACTIVITÉ RÉCENTE (List) -----
+LPUSH activity:feed "user:1 viewed product:101" "user:3 added product:104 to cart" "user:2 purchased order:1003" "user:5 reviewed product:108" "user:1 added product:103 to wishlist" "user:7 signed up" "user:10 viewed product:105" "user:4 purchased order:1007"
+
+# ----- AVIS PRODUITS (Sorted Set - score = note) -----
+ZADD reviews:product:101 5 "user:1" 4 "user:3" 5 "user:7" 4 "user:10"
+ZADD reviews:product:104 5 "user:3" 5 "user:6" 4 "user:1"
+ZADD reviews:product:105 4 "user:2" 5 "user:5" 4 "user:9"
+ZADD reviews:product:108 4 "user:5" 5 "user:9" 3 "user:4"
+
+# ----- FIN DU DATASET -----
